@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Brand Safety Palette -->
+    <color name="primary_navy">#0A192F</color>
+    <color name="primary_dark">#020C1B</color>
+    <color name="secondary_teal">#64FFDA</color>
+    <color name="accent_red">#FF4D4D</color>
+    <color name="accent_red_dark">#D32F2F</color>
+    <color name="warning_yellow">#FFD166</color>
+    <color name="guard_active_green">#00E676</color>
+    <color name="guard_active_green_glow">#3300E676</color>
+
+    <!-- Neutral Shades -->
+    <color name="bg_dark">#0B132B</color>
+    <color name="card_bg_dark">#1C2541</color>
+    <color name="card_border">#3A506B</color>
+    <color name="text_white">#FFFFFF</color>
+    <color name="text_secondary">#8892B0</color>
+    <color name="text_muted">#4A5568</color>
+    <color name="divider_color">#233554</color>
+
+    <!-- Hotspot Map Colors -->
+    <color name="hotspot_high_risk">#E63946</color>
+    <color name="hotspot_moderate_risk">#F4A261</color>
+    <color name="map_grid_lines">#1D2D44</color>
+</resources>

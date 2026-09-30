@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="accent_red">#FF4D4D</color>
+    <color name="accent_red_dark">#D32F2F</color>
+    <color name="bg_dark">#0B132B</color>
+    <color name="card_bg_dark">#1C2541</color>
+    <color name="card_border">#3A506B</color>
+    <color name="divider_color">#233554</color>
+    <color name="guard_active_green">#00E676</color>
+    <color name="guard_active_green_glow">#3300E676</color>
+    <color name="hotspot_high_risk">#E63946</color>
+    <color name="hotspot_moderate_risk">#F4A261</color>
+    <color name="map_grid_lines">#1D2D44</color>
+    <color name="primary_dark">#020C1B</color>
+    <color name="primary_navy">#0A192F</color>
+    <color name="secondary_teal">#64FFDA</color>
+    <color name="text_muted">#4A5568</color>
+    <color name="text_secondary">#8892B0</color>
+    <color name="text_white">#FFFFFF</color>
+    <color name="warning_yellow">#FFD166</color>
+    <string name="acoustic_engine_listening">Status: Acoustic Engine Listening...</string>
+    <string name="acoustic_engine_paused">Status: Acoustic Guard Paused</string>
+    <string name="acoustic_safeword_label">ACOUSTIC SAFE-WORD</string>
+    <string name="app_name">EchoSafe</string>
+    <string name="contacts_satisfied">3 Contacts Configured ✓</string>
+    <string name="default_safeword">I am okay, false alarm</string>
+    <string name="evidentiary_vault_title">Evidentiary Vault &amp; Dispatch</string>
+    <string name="guard_active">GUARD: ACTIVE</string>
+    <string name="guard_inactive">GUARD: INACTIVE</string>
+    <string name="hold_for_manual_sos">HOLD FOR\nMANUAL SOS</string>
+    <string name="horizontal_shake_instruction">&lt;-- Shake Left/Right Rapidly --></string>
+    <string name="safeguards_title">SAFEGUARDS &amp; FALSE ALARM</string>
+    <string name="select_min_3_contacts">Select Minimum 3 Contacts</string>
+    <style name="Theme.EchoSafe" parent="Theme.Material3.Dark.NoActionBar">
+        
+        <item name="colorPrimary">@color/secondary_teal</item>
+        <item name="colorOnPrimary">@color/primary_dark</item>
+        <item name="colorSecondary">@color/secondary_teal</item>
+        <item name="colorOnSecondary">@color/primary_dark</item>
+        
+        <item name="android:statusBarColor">@color/primary_dark</item>
+        <item name="android:navigationBarColor">@color/primary_navy</item>
+        <item name="android:windowBackground">@color/bg_dark</item>
+    </style>
+</resources>

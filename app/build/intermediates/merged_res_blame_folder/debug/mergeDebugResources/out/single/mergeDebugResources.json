@@ -1,0 +1,82 @@
+[
+    {
+        "merged": "com.echosafe.app-debug-61:/drawable_ic_shield.xml.flat",
+        "source": "com.echosafe.app-main-63:/drawable/ic_shield.xml"
+    },
+    {
+        "merged": "com.echosafe.app-debug-61:/layout_activity_contacts.xml.flat",
+        "source": "com.echosafe.app-main-63:/layout/activity_contacts.xml"
+    },
+    {
+        "merged": "com.echosafe.app-debug-61:/drawable_ic_calibration.xml.flat",
+        "source": "com.echosafe.app-main-63:/drawable/ic_calibration.xml"
+    },
+    {
+        "merged": "com.echosafe.app-debug-61:/drawable_ic_shake.xml.flat",
+        "source": "com.echosafe.app-main-63:/drawable/ic_shake.xml"
+    },
+    {
+        "merged": "com.echosafe.app-debug-61:/layout_activity_disarm.xml.flat",
+        "source": "com.echosafe.app-main-63:/layout/activity_disarm.xml"
+    },
+    {
+        "merged": "com.echosafe.app-debug-61:/drawable_bg_card_rounded.xml.flat",
+        "source": "com.echosafe.app-main-63:/drawable/bg_card_rounded.xml"
+    },
+    {
+        "merged": "com.echosafe.app-debug-61:/drawable_ic_vault.xml.flat",
+        "source": "com.echosafe.app-main-63:/drawable/ic_vault.xml"
+    },
+    {
+        "merged": "com.echosafe.app-debug-61:/drawable_bg_sos_circle.xml.flat",
+        "source": "com.echosafe.app-main-63:/drawable/bg_sos_circle.xml"
+    },
+    {
+        "merged": "com.echosafe.app-debug-61:/drawable_ic_contacts.xml.flat",
+        "source": "com.echosafe.app-main-63:/drawable/ic_contacts.xml"
+    },
+    {
+        "merged": "com.echosafe.app-debug-61:/layout_activity_auth.xml.flat",
+        "source": "com.echosafe.app-main-63:/layout/activity_auth.xml"
+    },
+    {
+        "merged": "com.echosafe.app-debug-61:/drawable_bg_banner_active.xml.flat",
+        "source": "com.echosafe.app-main-63:/drawable/bg_banner_active.xml"
+    },
+    {
+        "merged": "com.echosafe.app-debug-61:/layout_activity_vault.xml.flat",
+        "source": "com.echosafe.app-main-63:/layout/activity_vault.xml"
+    },
+    {
+        "merged": "com.echosafe.app-debug-61:/layout_item_evidence.xml.flat",
+        "source": "com.echosafe.app-main-63:/layout/item_evidence.xml"
+    },
+    {
+        "merged": "com.echosafe.app-debug-61:/drawable_ic_mic.xml.flat",
+        "source": "com.echosafe.app-main-63:/drawable/ic_mic.xml"
+    },
+    {
+        "merged": "com.echosafe.app-debug-61:/layout_activity_calibration.xml.flat",
+        "source": "com.echosafe.app-main-63:/layout/activity_calibration.xml"
+    },
+    {
+        "merged": "com.echosafe.app-debug-61:/layout_item_contact.xml.flat",
+        "source": "com.echosafe.app-main-63:/layout/item_contact.xml"
+    },
+    {
+        "merged": "com.echosafe.app-debug-61:/layout_dialog_add_contact.xml.flat",
+        "source": "com.echosafe.app-main-63:/layout/dialog_add_contact.xml"
+    },
+    {
+        "merged": "com.echosafe.app-debug-61:/layout_activity_main.xml.flat",
+        "source": "com.echosafe.app-main-63:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.echosafe.app-debug-61:/drawable_bg_banner_inactive.xml.flat",
+        "source": "com.echosafe.app-main-63:/drawable/bg_banner_inactive.xml"
+    },
+    {
+        "merged": "com.echosafe.app-debug-61:/drawable_ic_home.xml.flat",
+        "source": "com.echosafe.app-main-63:/drawable/ic_home.xml"
+    }
+]

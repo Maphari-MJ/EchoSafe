@@ -1,0 +1,20 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.echosafe.app-mergeDebugResources-59:/values-v16/values-v16.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\Maphari - Sadiki\\.gradle\\caches\\9.6.0\\transforms\\0b00ec1e68fa3b8753d29c199cde5d47\\transformed\\appcompat-1.7.0\\res\\values-v16\\values-v16.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endLines": "5",
+                        "endColumns": "12",
+                        "endOffsets": "223"
+                    }
+                }
+            ]
+        }
+    ]
+}

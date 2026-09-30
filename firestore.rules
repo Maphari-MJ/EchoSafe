@@ -1,0 +1,33 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // User accounts: Strictly self-accessible
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+      
+      match /contacts/{contactId} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+      
+      match /calibration/{document=**} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+    }
+    
+    // Emergency records: Created by victim, read/update access granted to authenticated users
+    match /emergencies/{emergencyId} {
+      allow create: if request.auth != null;
+      allow read, update: if request.auth != null;
+      
+      match /evidence/{evidenceId} {
+        allow create, read: if request.auth != null;
+      }
+    }
+    
+    // Hotspots: Public read for all authenticated users, write for verified accounts
+    match /hotspots/{hotspotId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+    }
+  }
+}

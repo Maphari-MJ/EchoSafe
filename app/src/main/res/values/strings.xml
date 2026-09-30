@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">EchoSafe</string>
+    <string name="guard_active">GUARD: ACTIVE</string>
+    <string name="guard_inactive">GUARD: INACTIVE</string>
+    <string name="hold_for_manual_sos">HOLD FOR\nMANUAL SOS</string>
+    <string name="acoustic_engine_listening">Status: Acoustic Engine Listening...</string>
+    <string name="acoustic_engine_paused">Status: Acoustic Guard Paused</string>
+    <string name="select_min_3_contacts">Select Minimum 3 Contacts</string>
+    <string name="contacts_satisfied">3 Contacts Configured ✓</string>
+    <string name="horizontal_shake_instruction">&lt;-- Shake Left/Right Rapidly --&gt;</string>
+    <string name="safeguards_title">SAFEGUARDS &amp; FALSE ALARM</string>
+    <string name="acoustic_safeword_label">ACOUSTIC SAFE-WORD</string>
+    <string name="default_safeword">I am okay, false alarm</string>
+    <string name="evidentiary_vault_title">Evidentiary Vault &amp; Dispatch</string>
+</resources>
