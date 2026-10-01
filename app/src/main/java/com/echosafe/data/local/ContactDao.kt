@@ -25,4 +25,7 @@ interface ContactDao {
 
     @Query("SELECT COUNT(*) FROM emergency_contacts")
     suspend fun getCount(): Int
+
+    @Query("DELETE FROM emergency_contacts")
+    suspend fun clearAll()
 }

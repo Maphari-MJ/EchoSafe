@@ -7,6 +7,7 @@ import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
 import kotlin.math.sin
+import kotlin.math.sqrt
 
 class WaveformVisualizerView @JvmOverloads constructor(
     context: Context,
@@ -32,6 +33,20 @@ class WaveformVisualizerView @JvmOverloads constructor(
         this.amplitude = amp.coerceIn(0.05f, 1.0f)
         this.phase += 0.2f
         invalidate()
+    }
+
+    /**
+     * Updates the waveform with real audio amplitude from a PCM buffer.
+     */
+    fun setAudioAmplitude(samples: ShortArray) {
+        if (samples.isEmpty()) return
+        var sumSquares = 0.0
+        for (sample in samples) {
+            sumSquares += sample * sample
+        }
+        val rms = sqrt(sumSquares / samples.size)
+        val amp = (rms / 32768.0).toFloat().coerceIn(0.05f, 1.0f)
+        setAmplitude(amp)
     }
 
     override fun onDraw(canvas: Canvas) {

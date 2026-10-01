@@ -88,10 +88,14 @@ dependencies {
     implementation(libs.tensorflow.lite)
     implementation(libs.tensorflow.lite.support)
 
-    // Security & JSON
+    // Security, Networking & JSON
     implementation(libs.androidx.security.crypto)
     implementation(libs.androidx.biometric.ktx)
     implementation(libs.gson)
+    implementation(libs.retrofit.core)
+    implementation(libs.retrofit.converter.gson)
+    implementation(libs.okhttp.core)
+    implementation(libs.okhttp.logging.interceptor)
 
     // Testing
     testImplementation(libs.junit)

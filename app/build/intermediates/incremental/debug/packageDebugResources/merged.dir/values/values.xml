@@ -2,10 +2,20 @@
 <resources>
     <color name="accent_red">#FF4D4D</color>
     <color name="accent_red_dark">#D32F2F</color>
-    <color name="bg_dark">#0B132B</color>
-    <color name="card_bg_dark">#1C2541</color>
-    <color name="card_border">#3A506B</color>
-    <color name="divider_color">#233554</color>
+    <color name="accent_rose_coral">#E34863</color>
+    <color name="accent_rose_pink">#E8526E</color>
+    <color name="badge_gbv_bg">#2E1229</color>
+    <color name="badge_gbv_border">#4D1B44</color>
+    <color name="bg_dark">#130713</color>
+    <color name="bg_gbv_dark">#130713</color>
+    <color name="btn_google_bg">#251023</color>
+    <color name="btn_google_border">#441C3E</color>
+    <color name="card_bg_dark">#210E20</color>
+    <color name="card_border">#3F193C</color>
+    <color name="card_gbv_border">#3F193C</color>
+    <color name="card_gbv_dark">#210E20</color>
+    <color name="divider_color">#3F193C</color>
+    <color name="emergency_red_bg">#2B0D1F</color>
     <color name="guard_active_green">#00E676</color>
     <color name="guard_active_green_glow">#3300E676</color>
     <color name="hotspot_high_risk">#E63946</color>
@@ -14,8 +24,9 @@
     <color name="primary_dark">#020C1B</color>
     <color name="primary_navy">#0A192F</color>
     <color name="secondary_teal">#64FFDA</color>
-    <color name="text_muted">#4A5568</color>
-    <color name="text_secondary">#8892B0</color>
+    <color name="text_gbv_muted">#C5B1C0</color>
+    <color name="text_muted">#7F6C7B</color>
+    <color name="text_secondary">#C5B1C0</color>
     <color name="text_white">#FFFFFF</color>
     <color name="warning_yellow">#FFD166</color>
     <string name="acoustic_engine_listening">Status: Acoustic Engine Listening...</string>

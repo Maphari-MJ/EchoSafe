@@ -6,10 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import com.echosafe.R;
@@ -21,7 +21,7 @@ import java.lang.String;
 
 public final class ActivityDisarmBinding implements ViewBinding {
   @NonNull
-  private final ConstraintLayout rootView;
+  private final ScrollView rootView;
 
   @NonNull
   public final MaterialButton btnBiometricAuthenticate;
@@ -37,6 +37,9 @@ public final class ActivityDisarmBinding implements ViewBinding {
 
   @NonNull
   public final MaterialCardView cardSafeWordDisarm;
+
+  @NonNull
+  public final MaterialCardView cardShakeDisarm;
 
   @NonNull
   public final MaterialCardView cardTimer;
@@ -62,20 +65,21 @@ public final class ActivityDisarmBinding implements ViewBinding {
   @NonNull
   public final TextView tvSafeWordPrompt;
 
-  private ActivityDisarmBinding(@NonNull ConstraintLayout rootView,
+  private ActivityDisarmBinding(@NonNull ScrollView rootView,
       @NonNull MaterialButton btnBiometricAuthenticate, @NonNull MaterialButton btnManualDisarm,
       @NonNull MaterialButton btnSubmitSafeWord, @NonNull MaterialCardView cardPowerDisarm,
-      @NonNull MaterialCardView cardSafeWordDisarm, @NonNull MaterialCardView cardTimer,
-      @NonNull EditText etSpokenSafeWord, @NonNull ImageView ivPowerBiometric,
-      @NonNull TextView tvAlertCue, @NonNull TextView tvCountdownSeconds,
-      @NonNull TextView tvHeader, @NonNull TextView tvPowerInstruction,
-      @NonNull TextView tvSafeWordPrompt) {
+      @NonNull MaterialCardView cardSafeWordDisarm, @NonNull MaterialCardView cardShakeDisarm,
+      @NonNull MaterialCardView cardTimer, @NonNull EditText etSpokenSafeWord,
+      @NonNull ImageView ivPowerBiometric, @NonNull TextView tvAlertCue,
+      @NonNull TextView tvCountdownSeconds, @NonNull TextView tvHeader,
+      @NonNull TextView tvPowerInstruction, @NonNull TextView tvSafeWordPrompt) {
     this.rootView = rootView;
     this.btnBiometricAuthenticate = btnBiometricAuthenticate;
     this.btnManualDisarm = btnManualDisarm;
     this.btnSubmitSafeWord = btnSubmitSafeWord;
     this.cardPowerDisarm = cardPowerDisarm;
     this.cardSafeWordDisarm = cardSafeWordDisarm;
+    this.cardShakeDisarm = cardShakeDisarm;
     this.cardTimer = cardTimer;
     this.etSpokenSafeWord = etSpokenSafeWord;
     this.ivPowerBiometric = ivPowerBiometric;
@@ -88,7 +92,7 @@ public final class ActivityDisarmBinding implements ViewBinding {
 
   @Override
   @NonNull
-  public ConstraintLayout getRoot() {
+  public ScrollView getRoot() {
     return rootView;
   }
 
@@ -143,6 +147,12 @@ public final class ActivityDisarmBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.cardShakeDisarm;
+      MaterialCardView cardShakeDisarm = ViewBindings.findChildViewById(rootView, id);
+      if (cardShakeDisarm == null) {
+        break missingId;
+      }
+
       id = R.id.cardTimer;
       MaterialCardView cardTimer = ViewBindings.findChildViewById(rootView, id);
       if (cardTimer == null) {
@@ -191,9 +201,9 @@ public final class ActivityDisarmBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ActivityDisarmBinding((ConstraintLayout) rootView, btnBiometricAuthenticate,
-          btnManualDisarm, btnSubmitSafeWord, cardPowerDisarm, cardSafeWordDisarm, cardTimer,
-          etSpokenSafeWord, ivPowerBiometric, tvAlertCue, tvCountdownSeconds, tvHeader,
+      return new ActivityDisarmBinding((ScrollView) rootView, btnBiometricAuthenticate,
+          btnManualDisarm, btnSubmitSafeWord, cardPowerDisarm, cardSafeWordDisarm, cardShakeDisarm,
+          cardTimer, etSpokenSafeWord, ivPowerBiometric, tvAlertCue, tvCountdownSeconds, tvHeader,
           tvPowerInstruction, tvSafeWordPrompt);
     }
     String missingId = rootView.getResources().getResourceName(id);

@@ -15,7 +15,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Multi-Mood Voice Calibration"
+            android:text="Voice Calibration"
             android:textColor="@color/text_white"
             android:textSize="22sp"
             android:textStyle="bold" />
@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="Tunes acoustic danger thresholds &amp; registers on-device secret keyphrases"
+            android:text="Hold each button and speak to calibrate your voice profile"
             android:textColor="@color/text_secondary"
             android:textSize="13sp" />
 
@@ -44,19 +44,18 @@
                 android:layout_height="match_parent" />
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- 3 Recording State Cards -->
+        <!-- Voice Calibration Section -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Acoustic Calibration Steps"
+            android:text="Voice Calibration"
             android:textColor="@color/secondary_teal"
             android:textSize="16sp"
             android:textStyle="bold" />
 
         <!-- Card 1: Normal State -->
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardNormal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -68,48 +67,42 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:padding="14dp">
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="1. Normal Baseline Voice"
-                        android:textColor="@color/text_white"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/tvNormalStatus"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:text="Speak normally (Ambient RMS: 42 dB)"
-                        android:textColor="@color/text_secondary"
-                        android:textSize="12sp" />
-                </LinearLayout>
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnCalibrateNormal"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Calibrate"
+                    android:text="1. Normal Voice"
+                    android:textColor="@color/text_white"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvNormalStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Hold and speak normally"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnRecordNormal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Hold to Record"
                     android:textColor="@color/secondary_teal"
-                    app:strokeColor="@color/secondary_teal" />
+                    app:backgroundTint="@color/card_bg_dark"
+                    app:strokeColor="@color/secondary_teal"
+                    app:strokeWidth="1dp"
+                    app:cornerRadius="8dp" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
         <!-- Card 2: Excited State -->
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardExcited"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -121,48 +114,42 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:padding="14dp">
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="2. Excited / Elevated Voice"
-                        android:textColor="@color/text_white"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/tvExcitedStatus"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:text="Speak loudly with urgency (Pitch: 280 Hz)"
-                        android:textColor="@color/text_secondary"
-                        android:textSize="12sp" />
-                </LinearLayout>
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnCalibrateExcited"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Calibrate"
+                    android:text="2. Excited / Elevated Voice"
+                    android:textColor="@color/text_white"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvExcitedStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Hold and speak loudly with urgency"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnRecordExcited"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Hold to Record"
                     android:textColor="@color/secondary_teal"
-                    app:strokeColor="@color/secondary_teal" />
+                    app:backgroundTint="@color/card_bg_dark"
+                    app:strokeColor="@color/secondary_teal"
+                    app:strokeWidth="1dp"
+                    app:cornerRadius="8dp" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
         <!-- Card 3: Scream State -->
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardScream"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -174,90 +161,151 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:padding="14dp">
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="3. Scream / Distress Threshold"
-                        android:textColor="@color/text_white"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/tvScreamStatus"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:text="Threshold set to 550 Hz / 75 dB"
-                        android:textColor="@color/text_secondary"
-                        android:textSize="12sp" />
-                </LinearLayout>
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnCalibrateScream"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Calibrate"
+                    android:text="3. Scream / Distress"
+                    android:textColor="@color/text_white"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvScreamStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Hold and scream to set distress threshold"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnRecordScream"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Hold to Record"
                     android:textColor="@color/accent_red"
-                    app:strokeColor="@color/accent_red" />
+                    app:backgroundTint="@color/card_bg_dark"
+                    app:strokeColor="@color/accent_red"
+                    app:strokeWidth="1dp"
+                    app:cornerRadius="8dp" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Secret Keyphrase & Safe Word Configuration -->
+        <!-- Keyphrase Recording Section -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Trigger Keyphrase &amp; Safe-Word (On-Device SHA-256)"
+            android:text="Emergency Keyphrase"
             android:textColor="@color/secondary_teal"
             android:textSize="16sp"
             android:textStyle="bold" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilKeyphrase"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:hint="Custom Secret Trigger Phrase (e.g., 'Red Falcon')"
-            android:textColorHint="@color/text_secondary"
-            app:boxStrokeColor="@color/secondary_teal">
+            app:cardBackgroundColor="@color/card_bg_dark"
+            app:cardCornerRadius="10dp"
+            app:strokeColor="@color/card_border"
+            app:strokeWidth="1dp">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etKeyphrase"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Red Falcon"
-                android:textColor="@color/text_white" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:orientation="vertical"
+                android:padding="14dp">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilSafeWord"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Trigger Keyphrase"
+                    android:textColor="@color/text_white"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvKeyphraseStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Hold and speak your emergency keyphrase"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnRecordKeyphrase"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Hold to Record Keyphrase"
+                    android:textColor="@color/accent_red"
+                    app:backgroundTint="@color/card_bg_dark"
+                    app:strokeColor="@color/accent_red"
+                    app:strokeWidth="1dp"
+                    app:cornerRadius="8dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Safe Word Recording Section -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Safe-Word (Disarm)"
+            android:textColor="@color/secondary_teal"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:hint="Acoustic Safe-Word (Disarm Phrase)"
-            android:textColorHint="@color/text_secondary"
-            app:boxStrokeColor="@color/secondary_teal">
+            app:cardBackgroundColor="@color/card_bg_dark"
+            app:cardCornerRadius="10dp"
+            app:strokeColor="@color/card_border"
+            app:strokeWidth="1dp">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etSafeWord"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="I am okay, false alarm"
-                android:textColor="@color/text_white" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:orientation="vertical"
+                android:padding="14dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Safe-Word Phrase"
+                    android:textColor="@color/text_white"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvSafeWordStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Hold and speak your safe-word"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnRecordSafeWord"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Hold to Record Safe-Word"
+                    android:textColor="@color/secondary_teal"
+                    app:backgroundTint="@color/card_bg_dark"
+                    app:strokeColor="@color/secondary_teal"
+                    app:strokeWidth="1dp"
+                    app:cornerRadius="8dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
         <!-- Save Button -->
         <com.google.android.material.button.MaterialButton

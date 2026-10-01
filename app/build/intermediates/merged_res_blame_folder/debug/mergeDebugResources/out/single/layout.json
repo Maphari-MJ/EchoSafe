@@ -1,38 +1,46 @@
 [
     {
-        "merged": "com.echosafe.app-mergeDebugResources-60:/layout/activity_auth.xml",
-        "source": "com.echosafe.app-main-63:/layout/activity_auth.xml"
+        "merged": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-mergeDebugResources-60:\\layout\\activity_auth.xml",
+        "source": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-main-63:\\layout\\activity_auth.xml"
     },
     {
-        "merged": "com.echosafe.app-mergeDebugResources-60:/layout/activity_disarm.xml",
-        "source": "com.echosafe.app-main-63:/layout/activity_disarm.xml"
+        "merged": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-mergeDebugResources-60:\\layout\\item_evidence.xml",
+        "source": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-main-63:\\layout\\item_evidence.xml"
     },
     {
         "merged": "com.echosafe.app-mergeDebugResources-60:/layout/activity_calibration.xml",
         "source": "com.echosafe.app-main-63:/layout/activity_calibration.xml"
     },
     {
-        "merged": "com.echosafe.app-mergeDebugResources-60:/layout/activity_main.xml",
-        "source": "com.echosafe.app-main-63:/layout/activity_main.xml"
+        "merged": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-mergeDebugResources-60:\\layout\\activity_disarm.xml",
+        "source": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-main-63:\\layout\\activity_disarm.xml"
     },
     {
-        "merged": "com.echosafe.app-mergeDebugResources-60:/layout/activity_contacts.xml",
-        "source": "com.echosafe.app-main-63:/layout/activity_contacts.xml"
+        "merged": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-mergeDebugResources-60:\\layout\\activity_calibration.xml",
+        "source": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-main-63:\\layout\\activity_calibration.xml"
     },
     {
-        "merged": "com.echosafe.app-mergeDebugResources-60:/layout/activity_vault.xml",
-        "source": "com.echosafe.app-main-63:/layout/activity_vault.xml"
+        "merged": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-mergeDebugResources-60:\\layout\\activity_contacts.xml",
+        "source": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-main-63:\\layout\\activity_contacts.xml"
+    },
+    {
+        "merged": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-mergeDebugResources-60:\\layout\\item_contact.xml",
+        "source": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-main-63:\\layout\\item_contact.xml"
+    },
+    {
+        "merged": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-mergeDebugResources-60:\\layout\\activity_main.xml",
+        "source": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-main-63:\\layout\\activity_main.xml"
+    },
+    {
+        "merged": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-mergeDebugResources-60:\\layout\\activity_vault.xml",
+        "source": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-main-63:\\layout\\activity_vault.xml"
+    },
+    {
+        "merged": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-mergeDebugResources-60:\\layout\\dialog_add_contact.xml",
+        "source": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-main-63:\\layout\\dialog_add_contact.xml"
     },
     {
         "merged": "com.echosafe.app-mergeDebugResources-60:/layout/dialog_add_contact.xml",
         "source": "com.echosafe.app-main-63:/layout/dialog_add_contact.xml"
-    },
-    {
-        "merged": "com.echosafe.app-mergeDebugResources-60:/layout/item_evidence.xml",
-        "source": "com.echosafe.app-main-63:/layout/item_evidence.xml"
-    },
-    {
-        "merged": "com.echosafe.app-mergeDebugResources-60:/layout/item_contact.xml",
-        "source": "com.echosafe.app-main-63:/layout/item_contact.xml"
     }
 ]

@@ -5,9 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,13 +24,16 @@ import java.lang.String;
 
 public final class ActivityAuthBinding implements ViewBinding {
   @NonNull
-  private final ScrollView rootView;
+  private final FrameLayout rootView;
 
   @NonNull
   public final AutoCompleteTextView actvGender;
 
   @NonNull
   public final MaterialButton btnGoogleSignIn;
+
+  @NonNull
+  public final MaterialButton btnQuickExit;
 
   @NonNull
   public final MaterialButton btnSubmit;
@@ -51,7 +54,7 @@ public final class ActivityAuthBinding implements ViewBinding {
   public final TextInputEditText etPassword;
 
   @NonNull
-  public final ImageView ivLogo;
+  public final ImageView ivBgHand;
 
   @NonNull
   public final ProgressBar progressBar;
@@ -75,34 +78,29 @@ public final class ActivityAuthBinding implements ViewBinding {
   public final TextView tvFormTitle;
 
   @NonNull
-  public final TextView tvSubtitle;
-
-  @NonNull
-  public final TextView tvTitle;
-
-  @NonNull
   public final TextView tvToggleMode;
 
-  private ActivityAuthBinding(@NonNull ScrollView rootView,
+  private ActivityAuthBinding(@NonNull FrameLayout rootView,
       @NonNull AutoCompleteTextView actvGender, @NonNull MaterialButton btnGoogleSignIn,
-      @NonNull MaterialButton btnSubmit, @NonNull MaterialCardView cardForm,
-      @NonNull TextInputEditText etAge, @NonNull TextInputEditText etEmail,
-      @NonNull TextInputEditText etFullName, @NonNull TextInputEditText etPassword,
-      @NonNull ImageView ivLogo, @NonNull ProgressBar progressBar, @NonNull TextInputLayout tilAge,
+      @NonNull MaterialButton btnQuickExit, @NonNull MaterialButton btnSubmit,
+      @NonNull MaterialCardView cardForm, @NonNull TextInputEditText etAge,
+      @NonNull TextInputEditText etEmail, @NonNull TextInputEditText etFullName,
+      @NonNull TextInputEditText etPassword, @NonNull ImageView ivBgHand,
+      @NonNull ProgressBar progressBar, @NonNull TextInputLayout tilAge,
       @NonNull TextInputLayout tilEmail, @NonNull TextInputLayout tilFullName,
       @NonNull TextInputLayout tilGender, @NonNull TextInputLayout tilPassword,
-      @NonNull TextView tvFormTitle, @NonNull TextView tvSubtitle, @NonNull TextView tvTitle,
-      @NonNull TextView tvToggleMode) {
+      @NonNull TextView tvFormTitle, @NonNull TextView tvToggleMode) {
     this.rootView = rootView;
     this.actvGender = actvGender;
     this.btnGoogleSignIn = btnGoogleSignIn;
+    this.btnQuickExit = btnQuickExit;
     this.btnSubmit = btnSubmit;
     this.cardForm = cardForm;
     this.etAge = etAge;
     this.etEmail = etEmail;
     this.etFullName = etFullName;
     this.etPassword = etPassword;
-    this.ivLogo = ivLogo;
+    this.ivBgHand = ivBgHand;
     this.progressBar = progressBar;
     this.tilAge = tilAge;
     this.tilEmail = tilEmail;
@@ -110,14 +108,12 @@ public final class ActivityAuthBinding implements ViewBinding {
     this.tilGender = tilGender;
     this.tilPassword = tilPassword;
     this.tvFormTitle = tvFormTitle;
-    this.tvSubtitle = tvSubtitle;
-    this.tvTitle = tvTitle;
     this.tvToggleMode = tvToggleMode;
   }
 
   @Override
   @NonNull
-  public ScrollView getRoot() {
+  public FrameLayout getRoot() {
     return rootView;
   }
 
@@ -151,6 +147,12 @@ public final class ActivityAuthBinding implements ViewBinding {
       id = R.id.btnGoogleSignIn;
       MaterialButton btnGoogleSignIn = ViewBindings.findChildViewById(rootView, id);
       if (btnGoogleSignIn == null) {
+        break missingId;
+      }
+
+      id = R.id.btnQuickExit;
+      MaterialButton btnQuickExit = ViewBindings.findChildViewById(rootView, id);
+      if (btnQuickExit == null) {
         break missingId;
       }
 
@@ -190,9 +192,9 @@ public final class ActivityAuthBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.ivLogo;
-      ImageView ivLogo = ViewBindings.findChildViewById(rootView, id);
-      if (ivLogo == null) {
+      id = R.id.ivBgHand;
+      ImageView ivBgHand = ViewBindings.findChildViewById(rootView, id);
+      if (ivBgHand == null) {
         break missingId;
       }
 
@@ -238,27 +240,16 @@ public final class ActivityAuthBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.tvSubtitle;
-      TextView tvSubtitle = ViewBindings.findChildViewById(rootView, id);
-      if (tvSubtitle == null) {
-        break missingId;
-      }
-
-      id = R.id.tvTitle;
-      TextView tvTitle = ViewBindings.findChildViewById(rootView, id);
-      if (tvTitle == null) {
-        break missingId;
-      }
-
       id = R.id.tvToggleMode;
       TextView tvToggleMode = ViewBindings.findChildViewById(rootView, id);
       if (tvToggleMode == null) {
         break missingId;
       }
 
-      return new ActivityAuthBinding((ScrollView) rootView, actvGender, btnGoogleSignIn, btnSubmit,
-          cardForm, etAge, etEmail, etFullName, etPassword, ivLogo, progressBar, tilAge, tilEmail,
-          tilFullName, tilGender, tilPassword, tvFormTitle, tvSubtitle, tvTitle, tvToggleMode);
+      return new ActivityAuthBinding((FrameLayout) rootView, actvGender, btnGoogleSignIn,
+          btnQuickExit, btnSubmit, cardForm, etAge, etEmail, etFullName, etPassword, ivBgHand,
+          progressBar, tilAge, tilEmail, tilFullName, tilGender, tilPassword, tvFormTitle,
+          tvToggleMode);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

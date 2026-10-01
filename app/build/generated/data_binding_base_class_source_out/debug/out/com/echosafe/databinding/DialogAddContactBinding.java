@@ -4,7 +4,6 @@ package com.echosafe.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,34 +21,16 @@ public final class DialogAddContactBinding implements ViewBinding {
   private final LinearLayout rootView;
 
   @NonNull
-  public final AutoCompleteTextView actvDialogRelationship;
+  public final TextInputEditText etSearchName;
 
   @NonNull
-  public final TextInputEditText etDialogName;
-
-  @NonNull
-  public final TextInputEditText etDialogPhone;
-
-  @NonNull
-  public final TextInputLayout tilName;
-
-  @NonNull
-  public final TextInputLayout tilPhone;
-
-  @NonNull
-  public final TextInputLayout tilRelationship;
+  public final TextInputLayout tilSearchName;
 
   private DialogAddContactBinding(@NonNull LinearLayout rootView,
-      @NonNull AutoCompleteTextView actvDialogRelationship, @NonNull TextInputEditText etDialogName,
-      @NonNull TextInputEditText etDialogPhone, @NonNull TextInputLayout tilName,
-      @NonNull TextInputLayout tilPhone, @NonNull TextInputLayout tilRelationship) {
+      @NonNull TextInputEditText etSearchName, @NonNull TextInputLayout tilSearchName) {
     this.rootView = rootView;
-    this.actvDialogRelationship = actvDialogRelationship;
-    this.etDialogName = etDialogName;
-    this.etDialogPhone = etDialogPhone;
-    this.tilName = tilName;
-    this.tilPhone = tilPhone;
-    this.tilRelationship = tilRelationship;
+    this.etSearchName = etSearchName;
+    this.tilSearchName = tilSearchName;
   }
 
   @Override
@@ -79,44 +60,19 @@ public final class DialogAddContactBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
-      id = R.id.actvDialogRelationship;
-      AutoCompleteTextView actvDialogRelationship = ViewBindings.findChildViewById(rootView, id);
-      if (actvDialogRelationship == null) {
+      id = R.id.etSearchName;
+      TextInputEditText etSearchName = ViewBindings.findChildViewById(rootView, id);
+      if (etSearchName == null) {
         break missingId;
       }
 
-      id = R.id.etDialogName;
-      TextInputEditText etDialogName = ViewBindings.findChildViewById(rootView, id);
-      if (etDialogName == null) {
+      id = R.id.tilSearchName;
+      TextInputLayout tilSearchName = ViewBindings.findChildViewById(rootView, id);
+      if (tilSearchName == null) {
         break missingId;
       }
 
-      id = R.id.etDialogPhone;
-      TextInputEditText etDialogPhone = ViewBindings.findChildViewById(rootView, id);
-      if (etDialogPhone == null) {
-        break missingId;
-      }
-
-      id = R.id.tilName;
-      TextInputLayout tilName = ViewBindings.findChildViewById(rootView, id);
-      if (tilName == null) {
-        break missingId;
-      }
-
-      id = R.id.tilPhone;
-      TextInputLayout tilPhone = ViewBindings.findChildViewById(rootView, id);
-      if (tilPhone == null) {
-        break missingId;
-      }
-
-      id = R.id.tilRelationship;
-      TextInputLayout tilRelationship = ViewBindings.findChildViewById(rootView, id);
-      if (tilRelationship == null) {
-        break missingId;
-      }
-
-      return new DialogAddContactBinding((LinearLayout) rootView, actvDialogRelationship,
-          etDialogName, etDialogPhone, tilName, tilPhone, tilRelationship);
+      return new DialogAddContactBinding((LinearLayout) rootView, etSearchName, tilSearchName);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

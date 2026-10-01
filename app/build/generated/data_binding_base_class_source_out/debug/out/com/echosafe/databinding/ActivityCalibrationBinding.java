@@ -13,9 +13,6 @@ import androidx.viewbinding.ViewBindings;
 import com.echosafe.R;
 import com.echosafe.ui.calibration.WaveformVisualizerView;
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.card.MaterialCardView;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 import java.lang.NullPointerException;
 import java.lang.Override;
 import java.lang.String;
@@ -25,43 +22,34 @@ public final class ActivityCalibrationBinding implements ViewBinding {
   private final ScrollView rootView;
 
   @NonNull
-  public final MaterialButton btnCalibrateExcited;
+  public final MaterialButton btnRecordExcited;
 
   @NonNull
-  public final MaterialButton btnCalibrateNormal;
+  public final MaterialButton btnRecordKeyphrase;
 
   @NonNull
-  public final MaterialButton btnCalibrateScream;
+  public final MaterialButton btnRecordNormal;
+
+  @NonNull
+  public final MaterialButton btnRecordSafeWord;
+
+  @NonNull
+  public final MaterialButton btnRecordScream;
 
   @NonNull
   public final MaterialButton btnSaveCalibration;
 
   @NonNull
-  public final MaterialCardView cardExcited;
-
-  @NonNull
-  public final MaterialCardView cardNormal;
-
-  @NonNull
-  public final MaterialCardView cardScream;
-
-  @NonNull
-  public final TextInputEditText etKeyphrase;
-
-  @NonNull
-  public final TextInputEditText etSafeWord;
-
-  @NonNull
-  public final TextInputLayout tilKeyphrase;
-
-  @NonNull
-  public final TextInputLayout tilSafeWord;
-
-  @NonNull
   public final TextView tvExcitedStatus;
 
   @NonNull
+  public final TextView tvKeyphraseStatus;
+
+  @NonNull
   public final TextView tvNormalStatus;
+
+  @NonNull
+  public final TextView tvSafeWordStatus;
 
   @NonNull
   public final TextView tvScreamStatus;
@@ -70,28 +58,23 @@ public final class ActivityCalibrationBinding implements ViewBinding {
   public final WaveformVisualizerView waveformVisualizer;
 
   private ActivityCalibrationBinding(@NonNull ScrollView rootView,
-      @NonNull MaterialButton btnCalibrateExcited, @NonNull MaterialButton btnCalibrateNormal,
-      @NonNull MaterialButton btnCalibrateScream, @NonNull MaterialButton btnSaveCalibration,
-      @NonNull MaterialCardView cardExcited, @NonNull MaterialCardView cardNormal,
-      @NonNull MaterialCardView cardScream, @NonNull TextInputEditText etKeyphrase,
-      @NonNull TextInputEditText etSafeWord, @NonNull TextInputLayout tilKeyphrase,
-      @NonNull TextInputLayout tilSafeWord, @NonNull TextView tvExcitedStatus,
-      @NonNull TextView tvNormalStatus, @NonNull TextView tvScreamStatus,
-      @NonNull WaveformVisualizerView waveformVisualizer) {
+      @NonNull MaterialButton btnRecordExcited, @NonNull MaterialButton btnRecordKeyphrase,
+      @NonNull MaterialButton btnRecordNormal, @NonNull MaterialButton btnRecordSafeWord,
+      @NonNull MaterialButton btnRecordScream, @NonNull MaterialButton btnSaveCalibration,
+      @NonNull TextView tvExcitedStatus, @NonNull TextView tvKeyphraseStatus,
+      @NonNull TextView tvNormalStatus, @NonNull TextView tvSafeWordStatus,
+      @NonNull TextView tvScreamStatus, @NonNull WaveformVisualizerView waveformVisualizer) {
     this.rootView = rootView;
-    this.btnCalibrateExcited = btnCalibrateExcited;
-    this.btnCalibrateNormal = btnCalibrateNormal;
-    this.btnCalibrateScream = btnCalibrateScream;
+    this.btnRecordExcited = btnRecordExcited;
+    this.btnRecordKeyphrase = btnRecordKeyphrase;
+    this.btnRecordNormal = btnRecordNormal;
+    this.btnRecordSafeWord = btnRecordSafeWord;
+    this.btnRecordScream = btnRecordScream;
     this.btnSaveCalibration = btnSaveCalibration;
-    this.cardExcited = cardExcited;
-    this.cardNormal = cardNormal;
-    this.cardScream = cardScream;
-    this.etKeyphrase = etKeyphrase;
-    this.etSafeWord = etSafeWord;
-    this.tilKeyphrase = tilKeyphrase;
-    this.tilSafeWord = tilSafeWord;
     this.tvExcitedStatus = tvExcitedStatus;
+    this.tvKeyphraseStatus = tvKeyphraseStatus;
     this.tvNormalStatus = tvNormalStatus;
+    this.tvSafeWordStatus = tvSafeWordStatus;
     this.tvScreamStatus = tvScreamStatus;
     this.waveformVisualizer = waveformVisualizer;
   }
@@ -123,21 +106,33 @@ public final class ActivityCalibrationBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
-      id = R.id.btnCalibrateExcited;
-      MaterialButton btnCalibrateExcited = ViewBindings.findChildViewById(rootView, id);
-      if (btnCalibrateExcited == null) {
+      id = R.id.btnRecordExcited;
+      MaterialButton btnRecordExcited = ViewBindings.findChildViewById(rootView, id);
+      if (btnRecordExcited == null) {
         break missingId;
       }
 
-      id = R.id.btnCalibrateNormal;
-      MaterialButton btnCalibrateNormal = ViewBindings.findChildViewById(rootView, id);
-      if (btnCalibrateNormal == null) {
+      id = R.id.btnRecordKeyphrase;
+      MaterialButton btnRecordKeyphrase = ViewBindings.findChildViewById(rootView, id);
+      if (btnRecordKeyphrase == null) {
         break missingId;
       }
 
-      id = R.id.btnCalibrateScream;
-      MaterialButton btnCalibrateScream = ViewBindings.findChildViewById(rootView, id);
-      if (btnCalibrateScream == null) {
+      id = R.id.btnRecordNormal;
+      MaterialButton btnRecordNormal = ViewBindings.findChildViewById(rootView, id);
+      if (btnRecordNormal == null) {
+        break missingId;
+      }
+
+      id = R.id.btnRecordSafeWord;
+      MaterialButton btnRecordSafeWord = ViewBindings.findChildViewById(rootView, id);
+      if (btnRecordSafeWord == null) {
+        break missingId;
+      }
+
+      id = R.id.btnRecordScream;
+      MaterialButton btnRecordScream = ViewBindings.findChildViewById(rootView, id);
+      if (btnRecordScream == null) {
         break missingId;
       }
 
@@ -147,57 +142,27 @@ public final class ActivityCalibrationBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.cardExcited;
-      MaterialCardView cardExcited = ViewBindings.findChildViewById(rootView, id);
-      if (cardExcited == null) {
-        break missingId;
-      }
-
-      id = R.id.cardNormal;
-      MaterialCardView cardNormal = ViewBindings.findChildViewById(rootView, id);
-      if (cardNormal == null) {
-        break missingId;
-      }
-
-      id = R.id.cardScream;
-      MaterialCardView cardScream = ViewBindings.findChildViewById(rootView, id);
-      if (cardScream == null) {
-        break missingId;
-      }
-
-      id = R.id.etKeyphrase;
-      TextInputEditText etKeyphrase = ViewBindings.findChildViewById(rootView, id);
-      if (etKeyphrase == null) {
-        break missingId;
-      }
-
-      id = R.id.etSafeWord;
-      TextInputEditText etSafeWord = ViewBindings.findChildViewById(rootView, id);
-      if (etSafeWord == null) {
-        break missingId;
-      }
-
-      id = R.id.tilKeyphrase;
-      TextInputLayout tilKeyphrase = ViewBindings.findChildViewById(rootView, id);
-      if (tilKeyphrase == null) {
-        break missingId;
-      }
-
-      id = R.id.tilSafeWord;
-      TextInputLayout tilSafeWord = ViewBindings.findChildViewById(rootView, id);
-      if (tilSafeWord == null) {
-        break missingId;
-      }
-
       id = R.id.tvExcitedStatus;
       TextView tvExcitedStatus = ViewBindings.findChildViewById(rootView, id);
       if (tvExcitedStatus == null) {
         break missingId;
       }
 
+      id = R.id.tvKeyphraseStatus;
+      TextView tvKeyphraseStatus = ViewBindings.findChildViewById(rootView, id);
+      if (tvKeyphraseStatus == null) {
+        break missingId;
+      }
+
       id = R.id.tvNormalStatus;
       TextView tvNormalStatus = ViewBindings.findChildViewById(rootView, id);
       if (tvNormalStatus == null) {
+        break missingId;
+      }
+
+      id = R.id.tvSafeWordStatus;
+      TextView tvSafeWordStatus = ViewBindings.findChildViewById(rootView, id);
+      if (tvSafeWordStatus == null) {
         break missingId;
       }
 
@@ -213,10 +178,10 @@ public final class ActivityCalibrationBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ActivityCalibrationBinding((ScrollView) rootView, btnCalibrateExcited,
-          btnCalibrateNormal, btnCalibrateScream, btnSaveCalibration, cardExcited, cardNormal,
-          cardScream, etKeyphrase, etSafeWord, tilKeyphrase, tilSafeWord, tvExcitedStatus,
-          tvNormalStatus, tvScreamStatus, waveformVisualizer);
+      return new ActivityCalibrationBinding((ScrollView) rootView, btnRecordExcited,
+          btnRecordKeyphrase, btnRecordNormal, btnRecordSafeWord, btnRecordScream,
+          btnSaveCalibration, tvExcitedStatus, tvKeyphraseStatus, tvNormalStatus, tvSafeWordStatus,
+          tvScreamStatus, waveformVisualizer);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

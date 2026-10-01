@@ -38,6 +38,8 @@ public final class ContactDao_Impl implements ContactDao {
 
   private final SharedSQLiteStatement __preparedStmtOfDeleteById;
 
+  private final SharedSQLiteStatement __preparedStmtOfClearAll;
+
   public ContactDao_Impl(@NonNull final RoomDatabase __db) {
     this.__db = __db;
     this.__insertionAdapterOfContactEntity = new EntityInsertionAdapter<ContactEntity>(__db) {
@@ -77,6 +79,14 @@ public final class ContactDao_Impl implements ContactDao {
       @NonNull
       public String createQuery() {
         final String _query = "DELETE FROM emergency_contacts WHERE contactId = ?";
+        return _query;
+      }
+    };
+    this.__preparedStmtOfClearAll = new SharedSQLiteStatement(__db) {
+      @Override
+      @NonNull
+      public String createQuery() {
+        final String _query = "DELETE FROM emergency_contacts";
         return _query;
       }
     };
@@ -159,6 +169,29 @@ public final class ContactDao_Impl implements ContactDao {
           }
         } finally {
           __preparedStmtOfDeleteById.release(_stmt);
+        }
+      }
+    }, $completion);
+  }
+
+  @Override
+  public Object clearAll(final Continuation<? super Unit> $completion) {
+    return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
+      @Override
+      @NonNull
+      public Unit call() throws Exception {
+        final SupportSQLiteStatement _stmt = __preparedStmtOfClearAll.acquire();
+        try {
+          __db.beginTransaction();
+          try {
+            _stmt.executeUpdateDelete();
+            __db.setTransactionSuccessful();
+            return Unit.INSTANCE;
+          } finally {
+            __db.endTransaction();
+          }
+        } finally {
+          __preparedStmtOfClearAll.release(_stmt);
         }
       }
     }, $completion);

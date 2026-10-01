@@ -13,8 +13,11 @@ import android.media.AudioFormat
 import android.media.AudioRecord
 import android.media.MediaRecorder
 import android.os.Build
+import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import android.os.PowerManager
+import android.speech.SpeechRecognizer
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
@@ -36,6 +39,11 @@ class AcousticDetectionService : Service() {
     private var recordingJob: Job? = null
     private val scope = CoroutineScope(Dispatchers.IO)
     private lateinit var classifier: AudioClassifierEngine
+    private lateinit var speechManager: SpeechRecognitionManager
+    private val handler = Handler(Looper.getMainLooper())
+
+    private var keyphraseHash: String = ""
+    private var safeWordHash: String = ""
 
     companion object {
         private const val TAG = "AcousticService"
@@ -54,6 +62,7 @@ class AcousticDetectionService : Service() {
     override fun onCreate() {
         super.onCreate()
         classifier = AudioClassifierEngine(this)
+        speechManager = SpeechRecognitionManager(this)
         createNotificationChannel()
     }
 
@@ -84,8 +93,20 @@ class AcousticDetectionService : Service() {
         val notification = buildForegroundNotification()
         startForeground(NOTIFICATION_ID, notification)
 
+        // Load keyphrase hash from database
+        scope.launch {
+            val db = EchoSafeDatabase.getInstance(applicationContext)
+            val profile = db.calibrationDao().getProfile()
+            keyphraseHash = profile?.secretKeyphraseHash ?: ""
+            safeWordHash = profile?.safeWordHash ?: ""
+        }
+
         // Start Audio Recording Loop
         startAudioLoop()
+
+        // Start Speech Recognition for keyphrase detection
+        startSpeechRecognition()
+
         Log.d(TAG, "Continuous Acoustic Engine Guard Started.")
     }
 
@@ -102,6 +123,9 @@ class AcousticDetectionService : Service() {
         } catch (e: Exception) {
             Log.e(TAG, "Error stopping audioRecord", e)
         }
+
+        speechManager.stopListening()
+        speechManager.destroy()
 
         wakeLock?.let {
             if (it.isHeld) it.release()
@@ -166,6 +190,67 @@ class AcousticDetectionService : Service() {
         } catch (e: Exception) {
             Log.e(TAG, "Error in AudioRecord loop", e)
         }
+    }
+
+    private fun startSpeechRecognition() {
+        if (!SpeechRecognizer.isRecognitionAvailable(this)) {
+            Log.w(TAG, "Speech recognition not available on this device")
+            return
+        }
+
+        if (keyphraseHash.isEmpty()) {
+            Log.w(TAG, "No keyphrase hash available, skipping speech recognition")
+            return
+        }
+
+        speechManager.startListening(object : SpeechRecognitionManager.RecognitionCallback {
+            override fun onResult(text: String) {
+                Log.d(TAG, "Speech recognized: $text")
+
+                // Check if the recognized text matches the keyphrase
+                if (SecretKeyphraseDetector().matchesSecretKeyphrase(text, keyphraseHash)) {
+                    Log.w(TAG, "KEYPHRASE DETECTED: $text")
+                    onAcousticThreatDetected("KEYPHRASE_DETECTED")
+                }
+
+                // Restart listening for continuous detection
+                if (isRunning) {
+                    handler.postDelayed({
+                        if (isRunning) {
+                            speechManager.startListening(this)
+                        }
+                    }, 500)
+                }
+            }
+
+            override fun onError(error: String) {
+                Log.w(TAG, "Speech recognition error: $error")
+                // Restart listening after a delay
+                if (isRunning) {
+                    handler.postDelayed({
+                        if (isRunning) {
+                            speechManager.startListening(this)
+                        }
+                    }, 2000)
+                }
+            }
+
+            override fun onPartialResult(text: String) {
+                // Partial results available if needed
+            }
+
+            override fun onReadyForSpeech() {
+                Log.d(TAG, "Speech recognition ready")
+            }
+
+            override fun onBeginningOfSpeech() {
+                Log.d(TAG, "Speech recognition: beginning of speech")
+            }
+
+            override fun onEndOfSpeech() {
+                Log.d(TAG, "Speech recognition: end of speech")
+            }
+        })
     }
 
     private fun onAcousticThreatDetected(triggerType: String) {

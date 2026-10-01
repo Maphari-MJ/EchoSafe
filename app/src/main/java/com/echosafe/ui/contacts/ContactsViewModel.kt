@@ -40,4 +40,15 @@ class ContactsViewModel(application: Application) : AndroidViewModel(application
             loadContacts()
         }
     }
+
+    fun clearAndLoadFresh() {
+        viewModelScope.launch {
+            repository.clearAllContacts()
+            loadContacts()
+        }
+    }
+
+    suspend fun searchUsersByName(query: String): List<EmergencyContact> {
+        return repository.searchUsersByName(query)
+    }
 }

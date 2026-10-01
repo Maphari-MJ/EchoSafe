@@ -1,82 +1,130 @@
 [
     {
-        "merged": "com.echosafe.app-debug-61:/drawable_ic_shield.xml.flat",
-        "source": "com.echosafe.app-main-63:/drawable/ic_shield.xml"
+        "merged": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-debug-61:\\layout_activity_contacts.xml.flat",
+        "source": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-main-63:\\layout\\activity_contacts.xml"
     },
     {
-        "merged": "com.echosafe.app-debug-61:/layout_activity_contacts.xml.flat",
-        "source": "com.echosafe.app-main-63:/layout/activity_contacts.xml"
+        "merged": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-debug-61:\\layout_activity_disarm.xml.flat",
+        "source": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-main-63:\\layout\\activity_disarm.xml"
     },
     {
-        "merged": "com.echosafe.app-debug-61:/drawable_ic_calibration.xml.flat",
-        "source": "com.echosafe.app-main-63:/drawable/ic_calibration.xml"
+        "merged": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-debug-61:\\drawable_bg_gbv_button_google.xml.flat",
+        "source": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-main-63:\\drawable\\bg_gbv_button_google.xml"
     },
     {
-        "merged": "com.echosafe.app-debug-61:/drawable_ic_shake.xml.flat",
-        "source": "com.echosafe.app-main-63:/drawable/ic_shake.xml"
+        "merged": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-debug-61:\\drawable_ic_shield.xml.flat",
+        "source": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-main-63:\\drawable\\ic_shield.xml"
     },
     {
-        "merged": "com.echosafe.app-debug-61:/layout_activity_disarm.xml.flat",
-        "source": "com.echosafe.app-main-63:/layout/activity_disarm.xml"
+        "merged": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-debug-61:\\drawable_bg_gbv_hand.xml.flat",
+        "source": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-main-63:\\drawable\\bg_gbv_hand.xml"
     },
     {
-        "merged": "com.echosafe.app-debug-61:/drawable_bg_card_rounded.xml.flat",
-        "source": "com.echosafe.app-main-63:/drawable/bg_card_rounded.xml"
+        "merged": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-debug-61:\\drawable_ic_google.xml.flat",
+        "source": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-main-63:\\drawable\\ic_google.xml"
     },
     {
-        "merged": "com.echosafe.app-debug-61:/drawable_ic_vault.xml.flat",
-        "source": "com.echosafe.app-main-63:/drawable/ic_vault.xml"
+        "merged": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-debug-61:\\layout_activity_auth.xml.flat",
+        "source": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-main-63:\\layout\\activity_auth.xml"
     },
     {
-        "merged": "com.echosafe.app-debug-61:/drawable_bg_sos_circle.xml.flat",
-        "source": "com.echosafe.app-main-63:/drawable/bg_sos_circle.xml"
+        "merged": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-debug-61:\\drawable_ic_contacts.xml.flat",
+        "source": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-main-63:\\drawable\\ic_contacts.xml"
     },
     {
-        "merged": "com.echosafe.app-debug-61:/drawable_ic_contacts.xml.flat",
-        "source": "com.echosafe.app-main-63:/drawable/ic_contacts.xml"
+        "merged": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-debug-61:\\drawable_bg_banner_active.xml.flat",
+        "source": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-main-63:\\drawable\\bg_banner_active.xml"
     },
     {
-        "merged": "com.echosafe.app-debug-61:/layout_activity_auth.xml.flat",
-        "source": "com.echosafe.app-main-63:/layout/activity_auth.xml"
+        "merged": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-debug-61:\\drawable_ic_home.xml.flat",
+        "source": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-main-63:\\drawable\\ic_home.xml"
     },
     {
-        "merged": "com.echosafe.app-debug-61:/drawable_bg_banner_active.xml.flat",
-        "source": "com.echosafe.app-main-63:/drawable/bg_banner_active.xml"
+        "merged": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-debug-61:\\drawable_ic_vault.xml.flat",
+        "source": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-main-63:\\drawable\\ic_vault.xml"
     },
     {
-        "merged": "com.echosafe.app-debug-61:/layout_activity_vault.xml.flat",
-        "source": "com.echosafe.app-main-63:/layout/activity_vault.xml"
+        "merged": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-debug-61:\\drawable_ic_shake.xml.flat",
+        "source": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-main-63:\\drawable\\ic_shake.xml"
     },
     {
-        "merged": "com.echosafe.app-debug-61:/layout_item_evidence.xml.flat",
-        "source": "com.echosafe.app-main-63:/layout/item_evidence.xml"
+        "merged": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-debug-61:\\layout_dialog_add_contact.xml.flat",
+        "source": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-main-63:\\layout\\dialog_add_contact.xml"
     },
     {
-        "merged": "com.echosafe.app-debug-61:/drawable_ic_mic.xml.flat",
-        "source": "com.echosafe.app-main-63:/drawable/ic_mic.xml"
+        "merged": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-debug-61:\\drawable_bg_card_rounded.xml.flat",
+        "source": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-main-63:\\drawable\\bg_card_rounded.xml"
     },
     {
-        "merged": "com.echosafe.app-debug-61:/layout_activity_calibration.xml.flat",
-        "source": "com.echosafe.app-main-63:/layout/activity_calibration.xml"
+        "merged": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-debug-61:\\drawable_bg_gbv_card.xml.flat",
+        "source": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-main-63:\\drawable\\bg_gbv_card.xml"
     },
     {
-        "merged": "com.echosafe.app-debug-61:/layout_item_contact.xml.flat",
-        "source": "com.echosafe.app-main-63:/layout/item_contact.xml"
+        "merged": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-debug-61:\\drawable_bg_gbv_hand.png.flat",
+        "source": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-main-63:\\drawable\\bg_gbv_hand.png"
     },
     {
         "merged": "com.echosafe.app-debug-61:/layout_dialog_add_contact.xml.flat",
         "source": "com.echosafe.app-main-63:/layout/dialog_add_contact.xml"
     },
     {
-        "merged": "com.echosafe.app-debug-61:/layout_activity_main.xml.flat",
-        "source": "com.echosafe.app-main-63:/layout/activity_main.xml"
+        "merged": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-debug-61:\\layout_activity_main.xml.flat",
+        "source": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-main-63:\\layout\\activity_main.xml"
     },
     {
-        "merged": "com.echosafe.app-debug-61:/drawable_bg_banner_inactive.xml.flat",
-        "source": "com.echosafe.app-main-63:/drawable/bg_banner_inactive.xml"
+        "merged": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-debug-61:\\layout_activity_vault.xml.flat",
+        "source": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-main-63:\\layout\\activity_vault.xml"
     },
     {
-        "merged": "com.echosafe.app-debug-61:/drawable_ic_home.xml.flat",
-        "source": "com.echosafe.app-main-63:/drawable/ic_home.xml"
+        "merged": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-debug-61:\\drawable_ic_mic.xml.flat",
+        "source": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-main-63:\\drawable\\ic_mic.xml"
+    },
+    {
+        "merged": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-debug-61:\\drawable_bg_gbv_button_emergency.xml.flat",
+        "source": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-main-63:\\drawable\\bg_gbv_button_emergency.xml"
+    },
+    {
+        "merged": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-debug-61:\\drawable_bg_gbv_overlay.xml.flat",
+        "source": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-main-63:\\drawable\\bg_gbv_overlay.xml"
+    },
+    {
+        "merged": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-debug-61:\\layout_item_contact.xml.flat",
+        "source": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-main-63:\\layout\\item_contact.xml"
+    },
+    {
+        "merged": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-debug-61:\\drawable_bg_gbv_badge.xml.flat",
+        "source": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-main-63:\\drawable\\bg_gbv_badge.xml"
+    },
+    {
+        "merged": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-debug-61:\\layout_activity_calibration.xml.flat",
+        "source": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-main-63:\\layout\\activity_calibration.xml"
+    },
+    {
+        "merged": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-debug-61:\\drawable_bg_banner_inactive.xml.flat",
+        "source": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-main-63:\\drawable\\bg_banner_inactive.xml"
+    },
+    {
+        "merged": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-debug-61:\\layout_item_evidence.xml.flat",
+        "source": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-main-63:\\layout\\item_evidence.xml"
+    },
+    {
+        "merged": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-debug-61:\\drawable_ic_calibration.xml.flat",
+        "source": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-main-63:\\drawable\\ic_calibration.xml"
+    },
+    {
+        "merged": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-debug-61:\\drawable_bg_gbv_button_primary.xml.flat",
+        "source": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-main-63:\\drawable\\bg_gbv_button_primary.xml"
+    },
+    {
+        "merged": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-debug-61:\\drawable_bg_sos_circle.xml.flat",
+        "source": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-main-63:\\drawable\\bg_sos_circle.xml"
+    },
+    {
+        "merged": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-debug-61:\\drawable_img_auth_preview.png.flat",
+        "source": "C:\\Users\\munzhedzi\\.gradle\\daemon\\9.6.0\\com.echosafe.app-main-63:\\drawable\\img_auth_preview.png"
+    },
+    {
+        "merged": "com.echosafe.app-debug-61:/layout_activity_calibration.xml.flat",
+        "source": "com.echosafe.app-main-63:/layout/activity_calibration.xml"
     }
 ]
