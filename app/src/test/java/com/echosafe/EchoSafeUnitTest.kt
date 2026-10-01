@@ -31,6 +31,16 @@ class EchoSafeUnitTest {
     }
 
     @Test
+    fun secretKeyphraseDetector_detects_emergency_keywords() {
+        val detector = SecretKeyphraseDetector()
+
+        assertTrue(detector.matchesEmergencyKeyword("Please help me!"))
+        assertTrue(detector.matchesEmergencyKeyword("EMERGENCY"))
+        assertTrue(detector.matchesEmergencyKeyword("Save me!"))
+        assertFalse(detector.matchesEmergencyKeyword("Good morning, world"))
+    }
+
+    @Test
     fun audioClassifierEngine_detects_screams_correctly() {
         val engine = AudioClassifierEngine(null)
 

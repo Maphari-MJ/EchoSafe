@@ -159,13 +159,13 @@ class DisarmActivity : AppCompatActivity() {
 
     private fun play3BingSequence() {
         playBingTone()
-        handler.postDelayed({ playBingTone() }, 1000)
-        handler.postDelayed({ playBingTone() }, 2000)
+        handler.postDelayed({ playBingTone() }, 600)
+        handler.postDelayed({ playBingTone() }, 1200)
     }
 
     private fun playBingTone() {
         try {
-            toneGenerator?.startTone(ToneGenerator.TONE_PROP_BEEP2, 200)
+            toneGenerator?.startTone(ToneGenerator.TONE_PROP_BEEP2, 160)
         } catch (e: Exception) {
             // Audio cue handled
         }
@@ -173,10 +173,12 @@ class DisarmActivity : AppCompatActivity() {
 
     private fun triggerHapticPulse() {
         vibrator?.let { v ->
+            val discretePattern = longArrayOf(0, 140, 200, 140, 200, 140)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                v.vibrate(VibrationEffect.createOneShot(180, VibrationEffect.DEFAULT_AMPLITUDE))
+                v.vibrate(VibrationEffect.createWaveform(discretePattern, -1))
             } else {
-                v.vibrate(180)
+                @Suppress("DEPRECATION")
+                v.vibrate(discretePattern, -1)
             }
         }
     }

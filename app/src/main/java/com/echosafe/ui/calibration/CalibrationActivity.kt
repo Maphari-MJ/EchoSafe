@@ -160,25 +160,25 @@ class CalibrationActivity : AppCompatActivity() {
 
         // Save button
         binding.btnSaveCalibration.setOnClickListener {
-            if (recordedKeyphrase.isEmpty() || recordedSafeWord.isEmpty()) {
-                Toast.makeText(this, "Please record both Keyphrase and Safe-Word by speaking them", Toast.LENGTH_LONG).show()
-                return@setOnClickListener
-            }
+            val keyphraseToSave = recordedKeyphrase.ifEmpty { "Echo emergency" }
+            val safeWordToSave = recordedSafeWord.ifEmpty { "Blue sky" }
 
             viewModel.saveCalibration(
                 normalRms = normalRmsBaseline,
                 screamThreshold = screamPitchThreshold,
-                secretKeyphrase = recordedKeyphrase,
-                safeWord = recordedSafeWord
+                secretKeyphrase = keyphraseToSave,
+                safeWord = safeWordToSave
             )
 
-            Toast.makeText(this, "Acoustic Profile saved with SHA-256 integrity", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Acoustic Profile calibrated & saved with SHA-256 integrity", Toast.LENGTH_SHORT).show()
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
     }
 
     // ── Voice Calibration (AudioRecord) ──────────────────────────────────────
+
+    private var activeRecordingType: String = "normal"
 
     private fun startVoiceRecording(type: String) {
         if (isRecording) return
@@ -188,6 +188,7 @@ class CalibrationActivity : AppCompatActivity() {
             return
         }
 
+        activeRecordingType = type
         recordedSamples.clear()
         isRecording = true
 
@@ -252,21 +253,26 @@ class CalibrationActivity : AppCompatActivity() {
             // Ignore
         }
 
-        // Analyze recorded audio
+        // Analyze recorded sound audio
         if (recordedSamples.isNotEmpty()) {
             val buffer = recordedSamples.toShortArray()
-            val result = classifier.processBuffer(buffer, 45.0, 550.0)
+            val result = classifier.processBuffer(buffer, normalRmsBaseline, screamPitchThreshold)
 
-            // Update calibration values based on the recorded audio
-            normalRmsBaseline = result.currentRms
-            screamPitchThreshold = result.estimatedPitchHz
+            when (activeRecordingType) {
+                "normal" -> {
+                    normalRmsBaseline = result.currentRms
+                    binding.tvNormalStatus.text = "Calibrated ✓ (Ambient RMS: %.1f dB)".format(result.currentRms)
+                }
+                "excited" -> {
+                    binding.tvExcitedStatus.text = "Calibrated ✓ (Pitch strain: %.0f Hz, RMS: %.1f dB)".format(result.estimatedPitchHz, result.currentRms)
+                }
+                "scream" -> {
+                    screamPitchThreshold = result.estimatedPitchHz.coerceAtLeast(350.0)
+                    binding.tvScreamStatus.text = "Calibrated ✓ (Pitch: %.0f Hz, Peak: %.1f dB)".format(result.estimatedPitchHz, result.currentRms)
+                }
+            }
 
-            // Update UI
-            binding.tvNormalStatus.text = "Calibrated ✓ (Ambient RMS: %.1f dB)".format(result.currentRms)
-            binding.tvScreamStatus.text = "Calibrated ✓ (Pitch: %.0f Hz)".format(result.estimatedPitchHz)
-            binding.tvExcitedStatus.text = "Calibrated ✓ (Elevated pitch strain recorded)"
-
-            Toast.makeText(this, "Voice calibration complete", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Voice sound calibration complete for $activeRecordingType audio", Toast.LENGTH_SHORT).show()
         }
     }
 

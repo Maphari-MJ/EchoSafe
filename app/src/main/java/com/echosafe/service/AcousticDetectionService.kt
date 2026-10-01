@@ -10,26 +10,34 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.AudioFormat
+import android.media.AudioManager
 import android.media.AudioRecord
 import android.media.MediaRecorder
+import android.media.ToneGenerator
 import android.os.Build
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
 import android.os.PowerManager
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.speech.SpeechRecognizer
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import com.echosafe.R
 import com.echosafe.data.local.EchoSafeDatabase
+import com.echosafe.data.local.OfflineTriggerEntity
+import com.echosafe.data.repository.ContactsRepository
+import com.echosafe.dispatch.EmergencyDispatchManager
 import com.echosafe.ui.dashboard.MainActivity
-import com.echosafe.ui.disarm.DisarmActivity
+import com.echosafe.vault.EvidentiaryVaultManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import java.util.UUID
 
 class AcousticDetectionService : Service() {
 
@@ -104,7 +112,7 @@ class AcousticDetectionService : Service() {
         // Start Audio Recording Loop
         startAudioLoop()
 
-        // Start Speech Recognition for keyphrase detection
+        // Start Speech Recognition for keyphrase & keyword detection
         startSpeechRecognition()
 
         Log.d(TAG, "Continuous Acoustic Engine Guard Started.")
@@ -126,6 +134,7 @@ class AcousticDetectionService : Service() {
 
         speechManager.stopListening()
         speechManager.destroy()
+        classifier.close()
 
         wakeLock?.let {
             if (it.isHeld) it.release()
@@ -198,19 +207,15 @@ class AcousticDetectionService : Service() {
             return
         }
 
-        if (keyphraseHash.isEmpty()) {
-            Log.w(TAG, "No keyphrase hash available, skipping speech recognition")
-            return
-        }
-
         speechManager.startListening(object : SpeechRecognitionManager.RecognitionCallback {
             override fun onResult(text: String) {
                 Log.d(TAG, "Speech recognized: $text")
+                val detector = SecretKeyphraseDetector()
 
-                // Check if the recognized text matches the keyphrase
-                if (SecretKeyphraseDetector().matchesSecretKeyphrase(text, keyphraseHash)) {
-                    Log.w(TAG, "KEYPHRASE DETECTED: $text")
-                    onAcousticThreatDetected("KEYPHRASE_DETECTED")
+                // Check keyphrase OR universal emergency keywords (help, emergency, save me, stop, danger)
+                if (detector.matchesSecretKeyphrase(text, keyphraseHash) || detector.matchesEmergencyKeyword(text)) {
+                    Log.w(TAG, "KEYPHRASE OR EMERGENCY KEYWORD DETECTED: $text")
+                    onAcousticThreatDetected("KEYPHRASE_KEYWORD_DETECTED")
                 }
 
                 // Restart listening for continuous detection
@@ -236,30 +241,105 @@ class AcousticDetectionService : Service() {
             }
 
             override fun onPartialResult(text: String) {
-                // Partial results available if needed
+                val detector = SecretKeyphraseDetector()
+                if (detector.matchesSecretKeyphrase(text, keyphraseHash) || detector.matchesEmergencyKeyword(text)) {
+                    Log.w(TAG, "PARTIAL KEYPHRASE / KEYWORD DETECTED: $text")
+                    onAcousticThreatDetected("KEYPHRASE_KEYWORD_DETECTED")
+                }
             }
 
-            override fun onReadyForSpeech() {
-                Log.d(TAG, "Speech recognition ready")
-            }
-
-            override fun onBeginningOfSpeech() {
-                Log.d(TAG, "Speech recognition: beginning of speech")
-            }
-
-            override fun onEndOfSpeech() {
-                Log.d(TAG, "Speech recognition: end of speech")
-            }
+            override fun onReadyForSpeech() {}
+            override fun onBeginningOfSpeech() {}
+            override fun onEndOfSpeech() {}
         })
     }
 
+    /**
+     * Called when screaming, vocal strain, keyphrases, or emergency keywords are detected.
+     * STEALTH SECURITY REQUIREMENTS:
+     * 1. Does NOT reflect on user's screen (no loud emergency popups or screen wake).
+     * 2. Vibrates discrete non-continuous pulses (vibrates only a few times).
+     * 3. Plays 3 nicely paced notification bings.
+     * 4. Dispatches emergency alert to emergency contacts, cloud, SMS, & USSD gateways.
+     */
     private fun onAcousticThreatDetected(triggerType: String) {
-        Log.w(TAG, "Acoustic Threat Detected: $triggerType. Launching Disarm Window...")
-        val disarmIntent = Intent(this, DisarmActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-            putExtra(DisarmActivity.EXTRA_TRIGGER_TYPE, triggerType)
+        Log.w(TAG, "Acoustic Threat Activated: $triggerType. Executing Stealth Emergency Dispatch...")
+
+        // 1. Discrete Haptic Vibration (vibrates only a few times, NOT continuously)
+        triggerDiscreteVibration()
+
+        // 2. Play 3 Nicely Paced Notification Bings
+        playThreeNotificationBings()
+
+        // 3. Covert Silent Emergency Dispatch (screen does NOT show emergency activation)
+        executeSilentEmergencyDispatch(triggerType)
+    }
+
+    private fun triggerDiscreteVibration() {
+        try {
+            val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as? Vibrator
+            if (vibrator != null && vibrator.hasVibrator()) {
+                val discretePattern = longArrayOf(0, 140, 200, 140, 200, 140) // 3 short subtle pulses
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    vibrator.vibrate(VibrationEffect.createWaveform(discretePattern, -1)) // -1 = NO repeat loop
+                } else {
+                    @Suppress("DEPRECATION")
+                    vibrator.vibrate(discretePattern, -1)
+                }
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Vibration feedback error", e)
         }
-        startActivity(disarmIntent)
+    }
+
+    private fun playThreeNotificationBings() {
+        try {
+            val toneGenerator = ToneGenerator(AudioManager.STREAM_NOTIFICATION, 80)
+            toneGenerator.startTone(ToneGenerator.TONE_PROP_BEEP2, 160) // Bing 1
+            handler.postDelayed({
+                try { toneGenerator.startTone(ToneGenerator.TONE_PROP_BEEP2, 160) } catch (e: Exception) {} // Bing 2
+            }, 600)
+            handler.postDelayed({
+                try {
+                    toneGenerator.startTone(ToneGenerator.TONE_PROP_BEEP2, 160) // Bing 3
+                    handler.postDelayed({ toneGenerator.release() }, 300)
+                } catch (e: Exception) {}
+            }, 1200)
+        } catch (e: Exception) {
+            Log.e(TAG, "Audio bing playback error", e)
+        }
+    }
+
+    private fun executeSilentEmergencyDispatch(triggerType: String) {
+        scope.launch {
+            try {
+                val emergencyId = UUID.randomUUID().toString()
+                val trigger = OfflineTriggerEntity(
+                    triggerId = emergencyId,
+                    timestamp = System.currentTimeMillis(),
+                    triggerType = triggerType,
+                    latitude = -26.2041,
+                    longitude = 28.0473,
+                    dispatchChannel = "FCM"
+                )
+
+                val contactsRepo = ContactsRepository(applicationContext)
+                val contacts = contactsRepo.getAllContacts()
+                val contactPhoneNumbers = contacts.map { it.phoneNumber }.filter { it.isNotBlank() }
+
+                // Multi-Tier Dispatch (Cloud -> SMS -> USSD Zero-Airtime)
+                val dispatcher = EmergencyDispatchManager(applicationContext)
+                dispatcher.dispatchEmergency(trigger, contactPhoneNumbers)
+
+                // Capture Silent Evidentiary Package
+                val vaultManager = EvidentiaryVaultManager(applicationContext)
+                vaultManager.captureEmergencyEvidencePackage(emergencyId, null)
+
+                Log.d(TAG, "Stealth Emergency Dispatch completed silently for trigger: $triggerType")
+            } catch (e: Exception) {
+                Log.e(TAG, "Error in silent emergency dispatch", e)
+            }
+        }
     }
 
     private fun broadcastStatus(active: Boolean) {

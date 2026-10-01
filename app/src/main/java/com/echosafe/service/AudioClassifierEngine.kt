@@ -2,10 +2,22 @@ package com.echosafe.service
 
 import android.content.Context
 import android.util.Log
+import org.tensorflow.lite.Interpreter
+import java.io.FileInputStream
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
+import java.nio.channels.FileChannel
 import kotlin.math.abs
 import kotlin.math.log10
+import kotlin.math.max
 import kotlin.math.sqrt
 
+/**
+ * AudioClassifierEngine combines TensorFlow Lite AI classification
+ * with real-time acoustic feature extraction (RMS dB & pitch Hz estimation).
+ * Uses user-calibrated dynamic thresholds to accurately detect screams,
+ * vocal strain, and distress audio events.
+ */
 class AudioClassifierEngine(private val context: Context? = null) {
 
     companion object {
@@ -13,6 +25,33 @@ class AudioClassifierEngine(private val context: Context? = null) {
         const val SAMPLE_RATE = 16000 // 16 kHz
         const val BUFFER_CHUNK_MS = 100 // 100ms sliding buffer window
         const val SAMPLES_PER_CHUNK = (SAMPLE_RATE * BUFFER_CHUNK_MS) / 1000 // 1600 samples
+        private const val MODEL_FILENAME = "sound_classifier.tflite"
+    }
+
+    private var tfliteInterpreter: Interpreter? = null
+
+    init {
+        initTFLiteInterpreter()
+    }
+
+    private fun initTFLiteInterpreter() {
+        if (context == null) return
+        try {
+            val assetFileDescriptor = context.assets.openFd(MODEL_FILENAME)
+            val inputStream = FileInputStream(assetFileDescriptor.fileDescriptor)
+            val fileChannel = inputStream.channel
+            val startOffset = assetFileDescriptor.startOffset
+            val declaredLength = assetFileDescriptor.declaredLength
+            val modelBuffer = fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength)
+
+            val options = Interpreter.Options().apply {
+                setNumThreads(2)
+            }
+            tfliteInterpreter = Interpreter(modelBuffer, options)
+            Log.d(TAG, "TensorFlow Lite AI Interpreter initialized successfully.")
+        } catch (e: Exception) {
+            Log.w(TAG, "TFLite model asset could not be loaded into Interpreter (${e.message}); using fallback acoustic feature classifier.")
+        }
     }
 
     data class ClassificationResult(
@@ -25,7 +64,8 @@ class AudioClassifierEngine(private val context: Context? = null) {
 
     /**
      * Processes a 16-bit Mono PCM buffer chunk (100ms)
-     * Evaluates RMS energy, pitch spectral centroid, and scream characteristics
+     * Evaluates RMS energy, pitch spectral centroid, scream characteristics,
+     * and runs TFLite AI classification.
      */
     fun processBuffer(
         pcmBuffer: ShortArray,
@@ -48,22 +88,44 @@ class AudioClassifierEngine(private val context: Context? = null) {
         // 2. Pitch / Dominant Frequency Estimation via Zero-Crossing & Autocorrelation
         val estimatedPitchHz = estimatePitch(pcmBuffer, SAMPLE_RATE)
 
-        // 3. Dynamic Threshold Classification (Scream, Vocal Strain, Pitch Spike)
-        val isRmsElevated = rmsDb > (baselineRms + 18.0) || rmsDb > 75.0
-        val isPitchExceeded = estimatedPitchHz > screamPitchThreshold && estimatedPitchHz in 400.0..3500.0
+        // 3. TensorFlow Lite AI Classifier Inference (if model initialized)
+        var tfliteScreamConfidence = 0.0f
+        var tfliteStrainConfidence = 0.0f
+
+        tfliteInterpreter?.let { interpreter ->
+            try {
+                // Convert PCM ShortArray into normalized FloatArray [-1.0, 1.0]
+                val floatInput = Array(1) { FloatArray(pcmBuffer.size) }
+                for (i in pcmBuffer.indices) {
+                    floatInput[0][i] = pcmBuffer[i] / 32768.0f
+                }
+                // Output logits/probs array: [1, 4] -> [Scream, Vocal Strain, Normal Speech, Ambient]
+                val outputProbs = Array(1) { FloatArray(4) }
+                interpreter.run(floatInput, outputProbs)
+
+                tfliteScreamConfidence = outputProbs[0][0]
+                tfliteStrainConfidence = outputProbs[0][1]
+            } catch (e: Exception) {
+                // TFLite inference exception handled gracefully
+            }
+        }
+
+        // 4. Dynamic Calibrated Threshold Classification (Scream, Vocal Strain, Pitch Spike)
+        val isRmsElevated = rmsDb > (baselineRms + 16.0) || rmsDb > 72.0
+        val isPitchExceeded = estimatedPitchHz > screamPitchThreshold && estimatedPitchHz in 350.0..4000.0
 
         var isDanger = false
         var triggerType = ""
         var confidence = 0.0f
 
-        if (isRmsElevated && isPitchExceeded) {
+        if ((isRmsElevated && isPitchExceeded) || tfliteScreamConfidence > 0.65f) {
             isDanger = true
             triggerType = "PROLONGED_SCREAM"
-            confidence = 0.92f
-        } else if (isPitchExceeded && rmsDb > 65.0) {
+            confidence = max(0.92f, tfliteScreamConfidence)
+        } else if ((isPitchExceeded && rmsDb > 62.0) || tfliteStrainConfidence > 0.60f) {
             isDanger = true
             triggerType = "VOCAL_STRAIN_PITCH_SPIKE"
-            confidence = 0.85f
+            confidence = max(0.85f, tfliteStrainConfidence)
         }
 
         return ClassificationResult(
@@ -104,5 +166,14 @@ class AudioClassifierEngine(private val context: Context? = null) {
 
         val autoPitch = if (bestLag > 0) sampleRate.toDouble() / bestLag else zcrPitch
         return if (autoPitch in 50.0..4000.0) (autoPitch * 0.7 + zcrPitch * 0.3) else zcrPitch
+    }
+
+    fun close() {
+        try {
+            tfliteInterpreter?.close()
+            tfliteInterpreter = null
+        } catch (e: Exception) {
+            // Ignore
+        }
     }
 }
