@@ -1,9 +1,9 @@
 package com.echosafe.ui.auth
 
-import android.R
 import android.accounts.AccountManager
 import android.app.AlertDialog
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.text.InputType
 import android.util.Log
@@ -54,28 +54,35 @@ class AuthActivity : AppCompatActivity() {
 
     private fun setupGenderDropdown() {
         val genders = arrayOf("Female", "Male", "Non-Binary", "Prefer not to say")
-        val adapter = ArrayAdapter(this, R.layout.simple_dropdown_item_1line, genders)
+        val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, genders)
         binding.actvGender.setAdapter(adapter)
         binding.actvGender.setText(genders[0], false)
     }
 
     private fun setupListeners() {
+        binding.btnQuickExit.setOnClickListener {
+            // Stealth Quick Exit: Immediately close and minimize app
+            finishAffinity()
+        }
+
+
+
         binding.tvToggleMode.setOnClickListener {
             isSignUpMode = !isSignUpMode
             if (isSignUpMode) {
-                binding.tvFormTitle.text = "Account & Profile"
+                binding.tvFormTitle.text = "Identity & Guardian Profile"
                 binding.tilFullName.visibility = View.VISIBLE
                 binding.tilAge.visibility = View.VISIBLE
                 binding.tilGender.visibility = View.VISIBLE
-                binding.btnSubmit.text = "Sign Up / Continue"
-                binding.tvToggleMode.text = "Already have an account? Sign In"
+                binding.btnSubmit.text = "Create Safe Profile & Continue  →"
+                binding.tvToggleMode.text = "Already have a safe account? Sign In"
             } else {
                 binding.tvFormTitle.text = "Sign In"
                 binding.tilFullName.visibility = View.GONE
                 binding.tilAge.visibility = View.GONE
                 binding.tilGender.visibility = View.GONE
-                binding.btnSubmit.text = "Sign In"
-                binding.tvToggleMode.text = "Don't have an account? Sign Up"
+                binding.btnSubmit.text = "Sign In to Safe Space  →"
+                binding.tvToggleMode.text = "Don't have a safe account? Create Safe Profile"
             }
         }
 
@@ -139,23 +146,16 @@ class AuthActivity : AppCompatActivity() {
             emptyList()
         }
 
-        val accountList = mutableListOf<String>()
-        accountList.addAll(deviceAccounts)
-        if (accountList.isEmpty()) {
-            accountList.add("echosafe.user@gmail.com")
-            accountList.add("safety.volunteer@gmail.com")
+        if (deviceAccounts.isEmpty()) {
+            Toast.makeText(this, "No Google account found on device. Please sign in with email/password.", Toast.LENGTH_LONG).show()
+            return
         }
-        accountList.add("Use another Google Account...")
 
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Select Google Account")
-        builder.setItems(accountList.toTypedArray()) { _, which ->
-            if (which < accountList.size - 1) {
-                val selectedEmail = accountList[which]
-                onGoogleAccountSelected(selectedEmail)
-            } else {
-                showCustomGoogleEmailDialog()
-            }
+        builder.setItems(deviceAccounts.toTypedArray()) { _, which ->
+            val selectedEmail = deviceAccounts[which]
+            onGoogleAccountSelected(selectedEmail)
         }
         builder.show()
     }
@@ -205,18 +205,11 @@ class AuthActivity : AppCompatActivity() {
     private fun sendEmailVerificationCode(user: User, password: String) {
         currentGeneratedOtp = (100000..999999).random().toString()
 
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                Log.d("EchoSafeEmail", "========================================")
-                Log.d("EchoSafeEmail", "SENDING EMAIL VERIFICATION CODE TO: ${user.email}")
-                Log.d("EchoSafeEmail", "VERIFICATION CODE (OTP): $currentGeneratedOtp")
-                Log.d("EchoSafeEmail", "========================================")
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+        viewModel.sendOtp(user.email) { sent ->
+            Log.d("EchoSafeEmail", "Express Backend sendOtp response: $sent for ${user.email} (Demo OTP: $currentGeneratedOtp)")
         }
 
-        Toast.makeText(this, "Verification code sent to ${user.email}. Please check your inbox.", Toast.LENGTH_LONG).show()
+        Toast.makeText(this, "Verification code dispatched to ${user.email}. Check inbox.", Toast.LENGTH_LONG).show()
         showEmailVerificationDialog(user, password)
     }
 

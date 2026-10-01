@@ -43,7 +43,7 @@ class HotspotMapView @JvmOverloads constructor(
     }
 
     private val userLocationPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.parseColor("#64FFDA")
+        color = Color.parseColor("#D946EF")
         style = Paint.Style.FILL
     }
 
@@ -102,7 +102,7 @@ class HotspotMapView @JvmOverloads constructor(
         val userX = w * 0.5f
         val userY = h * 0.65f
         canvas.drawCircle(userX, userY, 18f, Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            color = Color.parseColor("#3364FFDA")
+            color = Color.parseColor("#33D946EF")
         })
         canvas.drawCircle(userX, userY, 8f, userLocationPaint)
         canvas.drawText("You are here", userX + 15f, userY + 8f, subTextPaint)

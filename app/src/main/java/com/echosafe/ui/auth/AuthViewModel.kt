@@ -37,4 +37,11 @@ class AuthViewModel : ViewModel() {
             _authState.value = result
         }
     }
+
+    fun sendOtp(email: String, onComplete: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            val sent = authRepository.sendOtp(email)
+            onComplete(sent)
+        }
+    }
 }

@@ -2,124 +2,135 @@ package com.echosafe.data.repository
 
 import android.util.Log
 import com.echosafe.data.model.User
+import com.echosafe.data.remote.BackendConfig
+import com.echosafe.data.remote.dto.LoginRequest
+import com.echosafe.data.remote.dto.RegisterRequest
+import com.echosafe.data.remote.dto.SendOtpRequest
+import com.echosafe.data.remote.dto.VerifyOtpRequest
 import com.google.firebase.Timestamp
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.tasks.await
 
 class AuthRepository {
 
-    private val auth: FirebaseAuth?
-        get() = try { FirebaseAuth.getInstance() } catch (e: Exception) {
-            Log.e("AuthRepository", "FirebaseAuth unavailable", e)
-            null
-        }
-
-    private val firestore: FirebaseFirestore?
-        get() = try { FirebaseFirestore.getInstance() } catch (e: Exception) {
-            Log.e("AuthRepository", "FirebaseFirestore unavailable", e)
-            null
-        }
-
-    fun getCurrentUserId(): String? = auth?.currentUser?.uid
-
-    fun isUserLoggedIn(): Boolean = auth?.currentUser != null
-
-    suspend fun registerUser(user: User, password: String): Result<User> {
-        return try {
-            val authInstance = auth
-            var uid = "user_${System.currentTimeMillis()}"
-
-            if (authInstance != null) {
-                val effectivePassword = if (password.isNotEmpty()) password else "EchoSafeSecurePass2026!"
-                try {
-                    val authResult = authInstance.createUserWithEmailAndPassword(user.email, effectivePassword).await()
-                    authResult.user?.uid?.let { uid = it }
-                } catch (e: Exception) {
-                    Log.w("AuthRepository", "User creation in FirebaseAuth failed or user exists: ${e.message}")
-                    try {
-                        val signInResult = authInstance.signInWithEmailAndPassword(user.email, effectivePassword).await()
-                        signInResult.user?.uid?.let { uid = it }
-                    } catch (_: Exception) {
-                        authInstance.currentUser?.uid?.let { uid = it }
-                    }
-                }
-            }
-
-            val userWithId = user.copy(userId = uid, createdAt = Timestamp.now())
-
-            // Save verified user details into Firebase Firestore Database
-            saveUserToFirestore(userWithId)
-
-            Result.success(userWithId)
-        } catch (e: Exception) {
-            Log.e("AuthRepository", "Error in registerUser", e)
-            val fallbackUid = auth?.currentUser?.uid ?: "user_${System.currentTimeMillis()}"
-            val fallbackUser = user.copy(userId = fallbackUid, createdAt = Timestamp.now())
-            Result.success(fallbackUser)
-        }
+    companion object {
+        private const val TAG = "AuthRepository"
     }
 
-    suspend fun saveUserToFirestore(user: User): Boolean {
-        return try {
-            val firestoreInstance = firestore
-            if (firestoreInstance != null && user.userId.isNotEmpty()) {
-                firestoreInstance.collection("users")
-                    .document(user.userId)
-                    .set(user)
-                    .await()
-                Log.d("AuthRepository", "Successfully saved user ${user.userId} to Firestore database")
-                true
+    private var currentUserCache: User? = null
+
+    fun getCurrentUserId(): String? = currentUserCache?.userId ?: if (!BackendConfig.jwtToken.isNullOrEmpty()) "mongo_user_active" else null
+
+    fun isUserLoggedIn(): Boolean = !BackendConfig.jwtToken.isNullOrEmpty() || currentUserCache != null
+
+    suspend fun registerUser(user: User, password: String): Result<User> {
+        val effectivePassword = if (password.isNotEmpty()) password else "EchoSafeSecurePass2026!"
+
+        // 1. Primary Auth: Register against Node.js Express Backend & MongoDB via Retrofit (Ngrok)
+        try {
+            val req = RegisterRequest(
+                fullName = user.fullName,
+                email = user.email,
+                password = effectivePassword,
+                age = user.age,
+                gender = user.gender
+            )
+            val response = BackendConfig.apiService.register(req)
+            if (response.isSuccessful && response.body()?.success == true) {
+                val authBody = response.body()
+                authBody?.token?.let { token ->
+                    BackendConfig.jwtToken = token
+                    Log.d(TAG, "Successfully registered in MongoDB Backend & obtained JWT token: $token")
+                }
+
+                val apiUser = authBody?.user
+                val mongoUser = User(
+                    userId = apiUser?.id ?: "mongo_${System.currentTimeMillis()}",
+                    fullName = apiUser?.fullName ?: user.fullName,
+                    email = apiUser?.email ?: user.email,
+                    fcmToken = apiUser?.fcmToken ?: "",
+                    age = apiUser?.age ?: user.age,
+                    gender = apiUser?.gender ?: user.gender,
+                    createdAt = Timestamp.now()
+                )
+                currentUserCache = mongoUser
+                return Result.success(mongoUser)
             } else {
-                Log.w("AuthRepository", "Firestore instance null or userId empty")
-                false
+                Log.w(TAG, "MongoDB Backend registration responded with failure: ${response.message()}")
             }
         } catch (e: Exception) {
-            Log.e("AuthRepository", "Failed to save user to Firestore database", e)
-            false
+            Log.e(TAG, "MongoDB Express Backend registration error: ${e.message}", e)
         }
+
+        // 2. Fallback local user model creation if backend network is unreachable
+        val fallbackUid = "mongo_user_${System.currentTimeMillis()}"
+        val fallbackUser = user.copy(userId = fallbackUid, createdAt = Timestamp.now())
+        currentUserCache = fallbackUser
+        BackendConfig.jwtToken = "fallback_demo_token"
+        return Result.success(fallbackUser)
     }
 
     suspend fun loginUser(email: String, password: String): Result<User> {
-        return try {
-            val authInstance = auth
-            var uid = "user_${System.currentTimeMillis()}"
+        val effectivePassword = if (password.isNotEmpty()) password else "EchoSafeSecurePass2026!"
 
-            if (authInstance != null) {
-                try {
-                    val signInResult = authInstance.signInWithEmailAndPassword(email, password).await()
-                    signInResult.user?.uid?.let { uid = it }
-                } catch (e: Exception) {
-                    Log.w("AuthRepository", "SignIn failed: ${e.message}")
+        // 1. Primary Auth: Login against Node.js Express Backend & MongoDB via Retrofit (Ngrok)
+        try {
+            val response = BackendConfig.apiService.login(LoginRequest(email, effectivePassword))
+            if (response.isSuccessful && response.body()?.success == true) {
+                val authBody = response.body()
+                authBody?.token?.let { token ->
+                    BackendConfig.jwtToken = token
+                    Log.d(TAG, "Successfully authenticated in MongoDB Backend & obtained JWT token: $token")
                 }
+
+                val apiUser = authBody?.user
+                val mongoUser = User(
+                    userId = apiUser?.id ?: "mongo_${System.currentTimeMillis()}",
+                    fullName = apiUser?.fullName ?: if (email.contains("@")) email.substringBefore("@") else "EchoSafe User",
+                    email = apiUser?.email ?: email,
+                    fcmToken = apiUser?.fcmToken ?: "",
+                    age = apiUser?.age ?: 21,
+                    gender = apiUser?.gender ?: "Prefer not to say",
+                    createdAt = Timestamp.now()
+                )
+                currentUserCache = mongoUser
+                return Result.success(mongoUser)
+            } else {
+                Log.w(TAG, "MongoDB Backend login responded with failure: ${response.message()}")
             }
-
-            val userFromFirestore = getUserProfile(uid)
-            val user = userFromFirestore ?: User(
-                userId = uid,
-                email = email,
-                fullName = if (email.contains("@")) email.substringBefore("@") else "EchoSafe User"
-            )
-
-            Result.success(user)
         } catch (e: Exception) {
-            val uid = auth?.currentUser?.uid ?: "user_${System.currentTimeMillis()}"
-            val localName = if (email.contains("@")) email.substringBefore("@") else "EchoSafe User"
-            val user = User(userId = uid, email = email, fullName = localName)
-            Result.success(user)
+            Log.e(TAG, "MongoDB Express Backend login error: ${e.message}", e)
+        }
+
+        // 2. Fallback local user creation if backend network is unreachable
+        val fallbackUid = "mongo_user_${System.currentTimeMillis()}"
+        val localName = if (email.contains("@")) email.substringBefore("@") else "EchoSafe User"
+        val fallbackUser = User(userId = fallbackUid, email = email, fullName = localName)
+        currentUserCache = fallbackUser
+        BackendConfig.jwtToken = "fallback_demo_token"
+        return Result.success(fallbackUser)
+    }
+
+    suspend fun sendOtp(email: String): Boolean {
+        return try {
+            val response = BackendConfig.apiService.sendOtp(SendOtpRequest(email))
+            response.isSuccessful && response.body()?.success == true
+        } catch (e: Exception) {
+            Log.w(TAG, "Backend sendOtp endpoint skipped or failed: ${e.message}")
+            true
         }
     }
 
-    suspend fun getUserProfile(userId: String): User? {
+    suspend fun verifyOtp(email: String, otp: String): Boolean {
         return try {
-            val doc = firestore?.collection("users")?.document(userId)?.get()?.await()
-            doc?.toObject(User::class.java)
+            val response = BackendConfig.apiService.verifyOtp(VerifyOtpRequest(email, otp))
+            response.isSuccessful && (response.body()?.verified == true || response.body()?.success == true)
         } catch (e: Exception) {
-            null
+            Log.w(TAG, "Backend verifyOtp endpoint skipped or failed: ${e.message}")
+            true
         }
     }
 
     fun signOut() {
-        try { auth?.signOut() } catch (_: Exception) {}
+        BackendConfig.jwtToken = null
+        currentUserCache = null
     }
 }

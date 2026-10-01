@@ -1,6 +1,8 @@
 package com.echosafe.data.repository
 
+import android.util.Log
 import com.echosafe.data.model.Hotspot
+import com.echosafe.data.remote.BackendConfig
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
@@ -11,6 +13,29 @@ class HotspotsRepository {
     private val firestore = FirebaseFirestore.getInstance()
 
     suspend fun getHotspots(): List<Hotspot> {
+        // 1. Try fetching from Node.js Express Backend via Retrofit (Ngrok)
+        try {
+            val response = BackendConfig.apiService.getNearbyHotspots()
+            if (response.isSuccessful && response.body()?.success == true) {
+                val apiHotspots = response.body()?.hotspots ?: emptyList()
+                if (apiHotspots.isNotEmpty()) {
+                    return apiHotspots.map {
+                        Hotspot(
+                            hotspotId = it.id,
+                            reportedBy = it.reportedBy,
+                            riskLevel = it.riskLevel,
+                            description = it.description,
+                            location = GeoPoint(it.location.latitude, it.location.longitude),
+                            createdAt = Timestamp.now()
+                        )
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            Log.w("HotspotsRepository", "Express Backend getNearbyHotspots call skipped/failed: ${e.message}")
+        }
+
+        // 2. Fetch from Firestore if available
         try {
             val snapshot = firestore.collection("hotspots").get().await()
             val remoteHotspots = snapshot.toObjects(Hotspot::class.java)
@@ -21,7 +46,7 @@ class HotspotsRepository {
             // Fallback to pre-loaded high-risk and moderate-risk safety pins
         }
 
-        // Return default GBV Crime Hotspot Heatmap & Risk Pins
+        // 3. Return default GBV Crime Hotspot Heatmap & Risk Pins
         return listOf(
             Hotspot(
                 hotspotId = "hs_001",

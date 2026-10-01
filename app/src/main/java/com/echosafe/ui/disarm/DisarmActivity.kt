@@ -14,6 +14,7 @@ import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import com.echosafe.databinding.ActivityDisarmBinding
 import com.echosafe.service.PowerButtonDetector
+import com.echosafe.service.ShakeDetector
 import com.echosafe.ui.vault.VaultActivity
 
 class DisarmActivity : AppCompatActivity() {
@@ -21,12 +22,13 @@ class DisarmActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDisarmBinding
     private val viewModel: DisarmViewModel by viewModels()
 
-    private var countdownSeconds = 15
+    private var countdownSeconds = 10
     private var isDisarmed = false
     private var isAuthenticationInProgress = false
     private val handler = Handler(Looper.getMainLooper())
     private var vibrator: Vibrator? = null
     private var powerButtonDetector: PowerButtonDetector? = null
+    private var shakeDetector: ShakeDetector? = null
     private var toneGenerator: ToneGenerator? = null
     private var biometricPrompt: BiometricPrompt? = null
     private var promptInfo: BiometricPrompt.PromptInfo? = null
@@ -43,7 +45,7 @@ class DisarmActivity : AppCompatActivity() {
             binding.tvCountdownSeconds.text = countdownSeconds.toString()
 
             if (countdownSeconds > 0) {
-                if (countdownSeconds in 10..14) {
+                if (countdownSeconds >= 7) { // 3-bing audio cue over first 3 seconds
                     playBingTone()
                 }
                 triggerHapticPulse()
@@ -67,11 +69,12 @@ class DisarmActivity : AppCompatActivity() {
         }
 
         setupPowerButtonDetector()
+        setupShakeDetector()
         setupBiometrics()
         setupListeners()
         viewModel.loadCalibration()
 
-        // Start countdown sequence
+        // Start 10-second alert countdown sequence
         startAlertSequence()
     }
 
@@ -79,6 +82,14 @@ class DisarmActivity : AppCompatActivity() {
         powerButtonDetector = PowerButtonDetector(this) {
             runOnUiThread {
                 triggerBiometricAuthentication()
+            }
+        }
+    }
+
+    private fun setupShakeDetector() {
+        shakeDetector = ShakeDetector(this) {
+            runOnUiThread {
+                disarmSafetyAlarm("Disarmed via Horizontal Shake Gesture")
             }
         }
     }
@@ -139,11 +150,17 @@ class DisarmActivity : AppCompatActivity() {
     }
 
     private fun startAlertSequence() {
-        countdownSeconds = 15
-        binding.tvCountdownSeconds.text = "15"
-        playBingTone()
+        countdownSeconds = 10
+        binding.tvCountdownSeconds.text = "10"
+        play3BingSequence()
         triggerHapticPulse()
         handler.postDelayed(countdownRunnable, 1000)
+    }
+
+    private fun play3BingSequence() {
+        playBingTone()
+        handler.postDelayed({ playBingTone() }, 1000)
+        handler.postDelayed({ playBingTone() }, 2000)
     }
 
     private fun playBingTone() {
@@ -174,7 +191,7 @@ class DisarmActivity : AppCompatActivity() {
             if (viewModel.verifySafeWord(entered)) {
                 disarmSafetyAlarm("Disarmed via Acoustic Safe-Word Verification")
             } else {
-                Toast.makeText(this, "Safe-Word incorrect. Use Double Power Click or Biometrics.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Safe-Word incorrect. Shake device, double power click, or authenticate.", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -196,6 +213,7 @@ class DisarmActivity : AppCompatActivity() {
         isAuthenticationInProgress = false
         handler.removeCallbacks(countdownRunnable)
         powerButtonDetector?.stopListening()
+        shakeDetector?.stopListening()
 
         Toast.makeText(this, "SAFEGUARDS SHUT OFF: $reason", Toast.LENGTH_LONG).show()
         finish()
@@ -206,6 +224,7 @@ class DisarmActivity : AppCompatActivity() {
         isDisarmed = true
         isAuthenticationInProgress = false
         powerButtonDetector?.stopListening()
+        shakeDetector?.stopListening()
 
         Toast.makeText(this, "COUNTDOWN EXPIRED: Multi-channel Emergency Dispatch Initiated!", Toast.LENGTH_LONG).show()
 
@@ -220,11 +239,13 @@ class DisarmActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         powerButtonDetector?.startListening()
+        shakeDetector?.startListening()
     }
 
     override fun onPause() {
         super.onPause()
         powerButtonDetector?.stopListening()
+        shakeDetector?.stopListening()
     }
 
     override fun onDestroy() {
@@ -232,6 +253,7 @@ class DisarmActivity : AppCompatActivity() {
         isAuthenticationInProgress = false
         handler.removeCallbacks(countdownRunnable)
         powerButtonDetector?.stopListening()
+        shakeDetector?.stopListening()
         toneGenerator?.release()
         super.onDestroy()
     }

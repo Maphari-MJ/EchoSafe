@@ -11,6 +11,9 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.echosafe.data.local.EchoSafeDatabase
 import com.echosafe.data.local.OfflineTriggerEntity
+import com.echosafe.data.remote.BackendConfig
+import com.echosafe.data.remote.dto.LocationDto
+import com.echosafe.data.remote.dto.TriggerEmergencyRequest
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -33,7 +36,7 @@ class EmergencyDispatchManager(private val context: Context) {
 
     /**
      * Dispatches emergency according to the 3-Tier Offline & Zero-Airtime Dispatch Hierarchy
-     * Tier 1: Firebase Cloud Messaging (Wi-Fi / Mobile Data)
+     * Tier 1: Express Backend API (Ngrok) / Firebase Cloud Messaging (Wi-Fi / Mobile Data)
      * Tier 2: Native Cellular SMS (Standard Airtime / SMS Bundle)
      * Tier 3: Zero-Rated Telecom Gateways / USSD Payload Channels
      */
@@ -43,7 +46,7 @@ class EmergencyDispatchManager(private val context: Context) {
             db.triggerDao().insertTrigger(trigger)
 
             if (isNetworkAvailable()) {
-                val success = sendFirebaseCloudAlert(trigger)
+                val success = sendCloudAlert(trigger)
                 if (success) {
                     db.triggerDao().markSynced(trigger.triggerId)
                 } else {
@@ -69,8 +72,27 @@ class EmergencyDispatchManager(private val context: Context) {
         scheduleResiliencySync()
     }
 
-    private suspend fun sendFirebaseCloudAlert(trigger: OfflineTriggerEntity): Boolean {
-        return try {
+    private suspend fun sendCloudAlert(trigger: OfflineTriggerEntity): Boolean {
+        var remoteSuccess = false
+
+        // 1. Dispatch to Node.js Express Backend via Retrofit & Ngrok
+        try {
+            val req = TriggerEmergencyRequest(
+                triggerType = trigger.triggerType,
+                currentLocation = LocationDto(trigger.latitude, trigger.longitude),
+                locationAccuracy = 5.0f
+            )
+            val response = BackendConfig.apiService.triggerEmergency(req)
+            if (response.isSuccessful && response.body()?.success == true) {
+                Log.d(TAG, "Tier 1: Dispatched emergency to Node.js Express Backend via Ngrok: ${trigger.triggerId}")
+                remoteSuccess = true
+            }
+        } catch (e: Exception) {
+            Log.w(TAG, "Tier 1: Node.js Express Backend call failed or offline: ${e.message}")
+        }
+
+        // 2. Dispatch to Firebase Cloud Firestore
+        try {
             val firestore = FirebaseFirestore.getInstance()
             val userId = FirebaseAuth.getInstance().currentUser?.uid ?: "anonymous_user"
 
@@ -90,17 +112,18 @@ class EmergencyDispatchManager(private val context: Context) {
                 .await()
 
             Log.d(TAG, "Tier 1: Firebase Cloud Alert dispatched successfully: ${trigger.triggerId}")
-            true
+            remoteSuccess = true
         } catch (e: Exception) {
-            Log.e(TAG, "Tier 1 Failed: Cloud alert failed: ${e.message}")
-            false
+            Log.e(TAG, "Tier 1: Firebase cloud alert failed: ${e.message}")
         }
+
+        return remoteSuccess
     }
 
     private fun sendCellularSmsAlert(trigger: OfflineTriggerEntity, contacts: List<String>) {
         try {
             val smsManager = context.getSystemService(SmsManager::class.java)
-                ?: SmsManager.getDefault()
+                ?: @Suppress("DEPRECATION") SmsManager.getDefault()
             val message = "EMERGENCY ALERT from EchoSafe! " +
                     "GPS: https://maps.google.com/?q=${trigger.latitude},${trigger.longitude}"
 
@@ -125,12 +148,10 @@ class EmergencyDispatchManager(private val context: Context) {
 
             Log.d(TAG, "Tier 3: Formatted Zero-Airtime USSD Payload: $ussdString")
 
-            // Broadcast Intent to initiate USSD Telemetry Gateway Routing
             val intent = Intent(Intent.ACTION_CALL).apply {
                 data = Uri.parse(ussdString)
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK
             }
-            // If CALL_PHONE permission is granted, carrier will initiate; otherwise system intent
             context.startActivity(intent)
         } catch (e: Exception) {
             Log.e(TAG, "Tier 3: USSD background routing handled or fallback logged: ${e.message}")

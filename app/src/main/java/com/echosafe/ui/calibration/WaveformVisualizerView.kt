@@ -15,13 +15,13 @@ class WaveformVisualizerView @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr) {
 
     private val linePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.parseColor("#64FFDA")
+        color = Color.parseColor("#D946EF")
         strokeWidth = 4f
         style = Paint.Style.STROKE
     }
 
     private val fillPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.parseColor("#3364FFDA")
+        color = Color.parseColor("#33D946EF")
         style = Paint.Style.FILL
     }
 

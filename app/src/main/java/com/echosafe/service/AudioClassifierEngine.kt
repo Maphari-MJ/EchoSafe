@@ -6,7 +6,7 @@ import kotlin.math.abs
 import kotlin.math.log10
 import kotlin.math.sqrt
 
-class AudioClassifierEngine(private val context: Context) {
+class AudioClassifierEngine(private val context: Context? = null) {
 
     companion object {
         private const val TAG = "AudioClassifierEngine"

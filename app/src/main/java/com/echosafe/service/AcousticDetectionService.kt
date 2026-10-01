@@ -179,6 +179,7 @@ class AcousticDetectionService : Service() {
 
     private fun broadcastStatus(active: Boolean) {
         val intent = Intent(ACTION_STATUS_CHANGED).apply {
+            setPackage(packageName)
             putExtra(EXTRA_IS_ACTIVE, active)
         }
         sendBroadcast(intent)
